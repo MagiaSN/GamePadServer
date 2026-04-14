@@ -108,6 +108,15 @@ class SwitchBackend(GamepadBackend):
         )
         logger.info("Switch controller %d connected", self._controller_index)
 
+        # Complete the "Change Grip/Order" screen by pressing L+R.
+        # NXBT docs: emulated controllers must press L+R before regular input.
+        # Send a few neutral frames first to let the connection stabilize.
+        packet = self._nxbt.create_input_packet()
+        for _ in range(10):
+            self._nxbt.set_controller_input(self._controller_index, packet)
+            await asyncio.sleep(0.02)
+        await self.press_buttons(["L", "R"], duration=0.5)
+
     async def disconnect(self) -> None:
         if self._nxbt is not None and self._controller_index is not None:
             try:
