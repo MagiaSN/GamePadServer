@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GamePadServer Test</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+h1 { font-size: 1.4em; margin-bottom: 16px; color: #e94560; }
+
+/* --- Top bar --- */
+.top-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+select, button { padding: 8px 16px; border: 1px solid #444; border-radius: 6px; background: #16213e; color: #eee; font-size: 14px; cursor: pointer; }
+select:hover, button:hover { border-color: #e94560; }
+button.connect { background: #0f3460; }
+button.connect:hover { background: #e94560; }
+button.disconnect { background: #533; }
+button.disconnect:hover { background: #e94560; }
+.status { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.status.disconnected { background: #444; }
+.status.connecting { background: #b8860b; }
+.status.connected { background: #2d6a2d; }
+.status.error { background: #8b0000; }
+
+/* --- Gamepad layout --- */
+.gamepad { display: grid; grid-template-columns: 1fr 100px 1fr; grid-template-rows: auto auto auto; gap: 16px; max-width: 700px; width: 100%; margin-top: 10px; }
+.zone { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.zone-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+/* --- Buttons --- */
+.btn-row { display: flex; gap: 6px; justify-content: center; }
+.gbtn { width: 52px; height: 52px; border-radius: 50%; border: 2px solid #444; background: #16213e; color: #ccc; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.1s; user-select: none; }
+.gbtn:active, .gbtn.active { background: #e94560; border-color: #e94560; color: #fff; transform: scale(0.93); }
+.gbtn.small { width: 40px; height: 40px; font-size: 11px; }
+.gbtn.rect { width: 64px; height: 36px; border-radius: 8px; font-size: 11px; }
+.gbtn.trigger { width: 80px; height: 36px; border-radius: 8px; font-size: 12px; }
+
+/* --- D-Pad --- */
+.dpad { display: grid; grid-template-columns: 52px 52px 52px; grid-template-rows: 52px 52px 52px; gap: 2px; }
+.dpad .gbtn { border-radius: 6px; width: 52px; height: 52px; }
+.dpad-spacer { width: 52px; height: 52px; }
+
+/* --- Face buttons (diamond) --- */
+.face-diamond { display: grid; grid-template-columns: 52px 52px 52px; grid-template-rows: 52px 52px 52px; gap: 2px; justify-items: center; align-items: center; }
+
+/* --- Stick --- */
+.stick-zone { width: 120px; height: 120px; background: #16213e; border: 2px solid #444; border-radius: 50%; position: relative; touch-action: none; }
+.stick-knob { width: 44px; height: 44px; background: #0f3460; border: 2px solid #e94560; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: grab; transition: background 0.1s; }
+.stick-knob:active { background: #e94560; cursor: grabbing; }
+.stick-label { font-size: 11px; color: #666; }
+
+/* --- Function buttons --- */
+.func-row { display: flex; gap: 8px; justify-content: center; margin-top: 8px; }
+
+/* --- Center column --- */
+.center-col { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+</style>
+</head>
+<body>
+
+<h1>GamePadServer Test</h1>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <select id="platform">
+    <option value="switch">Nintendo Switch</option>
+    <option value="ps4">PlayStation 4</option>
+    <option value="ps5">PlayStation 5</option>
+    <option value="xbox">Xbox</option>
+  </select>
+  <button class="connect" id="btn-connect" onclick="connectController()">Connect</button>
+  <button class="disconnect" id="btn-disconnect" onclick="disconnectController()" disabled>Disconnect</button>
+  <span class="status disconnected" id="status-badge">Disconnected</span>
+</div>
+
+<!-- Gamepad -->
+<div class="gamepad">
+
+  <!-- LEFT column -->
+  <div class="zone">
+    <div class="zone-label">Triggers</div>
+    <div class="btn-row">
+      <button class="gbtn trigger" data-btn="ZL" onmousedown="btnDown(this)" onmouseup="btnUp(this)">ZL</button>
+      <button class="gbtn trigger" data-btn="L" onmousedown="btnDown(this)" onmouseup="btnUp(this)">L</button>
+    </div>
+
+    <div class="zone-label" style="margin-top:12px">D-Pad</div>
+    <div class="dpad">
+      <div class="dpad-spacer"></div>
+      <button class="gbtn" data-btn="DPAD_UP" onmousedown="btnDown(this)" onmouseup="btnUp(this)">&uarr;</button>
+      <div class="dpad-spacer"></div>
+      <button class="gbtn" data-btn="DPAD_LEFT" onmousedown="btnDown(this)" onmouseup="btnUp(this)">&larr;</button>
+      <div class="dpad-spacer"></div>
+      <button class="gbtn" data-btn="DPAD_RIGHT" onmousedown="btnDown(this)" onmouseup="btnUp(this)">&rarr;</button>
+      <div class="dpad-spacer"></div>
+      <button class="gbtn" data-btn="DPAD_DOWN" onmousedown="btnDown(this)" onmouseup="btnUp(this)">&darr;</button>
+      <div class="dpad-spacer"></div>
+    </div>
+
+    <div class="zone-label" style="margin-top:12px">Left Stick</div>
+    <div class="stick-zone" id="stick-left">
+      <div class="stick-knob" id="knob-left"></div>
+    </div>
+    <div class="stick-label" id="stick-left-val">0, 0</div>
+    <button class="gbtn small" data-btn="L_STICK" onmousedown="btnDown(this)" onmouseup="btnUp(this)">LS</button>
+  </div>
+
+  <!-- CENTER column -->
+  <div class="center-col">
+    <button class="gbtn rect" data-btn="MINUS" onmousedown="btnDown(this)" onmouseup="btnUp(this)" id="btn-minus">-</button>
+    <button class="gbtn small" data-btn="HOME" onmousedown="btnDown(this)" onmouseup="btnUp(this)">H</button>
+    <button class="gbtn small" data-btn="CAPTURE" onmousedown="btnDown(this)" onmouseup="btnUp(this)">C</button>
+    <button class="gbtn rect" data-btn="PLUS" onmousedown="btnDown(this)" onmouseup="btnUp(this)" id="btn-plus">+</button>
+  </div>
+
+  <!-- RIGHT column -->
+  <div class="zone">
+    <div class="zone-label">Triggers</div>
+    <div class="btn-row">
+      <button class="gbtn trigger" data-btn="R" onmousedown="btnDown(this)" onmouseup="btnUp(this)">R</button>
+      <button class="gbtn trigger" data-btn="ZR" onmousedown="btnDown(this)" onmouseup="btnUp(this)">ZR</button>
+    </div>
+
+    <div class="zone-label" style="margin-top:12px">Face Buttons</div>
+    <div class="face-diamond">
+      <div></div>
+      <button class="gbtn" data-btn="face-top" id="face-top" onmousedown="btnDown(this)" onmouseup="btnUp(this)">X</button>
+      <div></div>
+      <button class="gbtn" data-btn="face-left" id="face-left" onmousedown="btnDown(this)" onmouseup="btnUp(this)">Y</button>
+      <div></div>
+      <button class="gbtn" data-btn="face-right" id="face-right" onmousedown="btnDown(this)" onmouseup="btnUp(this)">A</button>
+      <div></div>
+      <button class="gbtn" data-btn="face-bottom" id="face-bottom" onmousedown="btnDown(this)" onmouseup="btnUp(this)">B</button>
+      <div></div>
+    </div>
+
+    <div class="zone-label" style="margin-top:12px">Right Stick</div>
+    <div class="stick-zone" id="stick-right">
+      <div class="stick-knob" id="knob-right"></div>
+    </div>
+    <div class="stick-label" id="stick-right-val">0, 0</div>
+    <button class="gbtn small" data-btn="R_STICK" onmousedown="btnDown(this)" onmouseup="btnUp(this)">RS</button>
+  </div>
+
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+let controllerId = null;
+let ws = null;
+let statusPoll = null;
+
+const API = '/api/v1';
+
+// Face button mapping per platform: { position: apiButtonName }
+const FACE_MAP = {
+  switch: { top: 'X', left: 'Y', right: 'A', bottom: 'B' },
+  ps4:    { top: 'TRIANGLE', left: 'SQUARE', right: 'CIRCLE', bottom: 'CROSS' },
+  ps5:    { top: 'TRIANGLE', left: 'SQUARE', right: 'CIRCLE', bottom: 'CROSS' },
+  xbox:   { top: 'Y', left: 'X', right: 'B', bottom: 'A' },
+};
+
+// Face button display labels per platform
+const FACE_LABELS = {
+  switch: { top: 'X', left: 'Y', right: 'A', bottom: 'B' },
+  ps4:    { top: '\u25B3', left: '\u25A1', right: '\u25CB', bottom: '\u00D7' },
+  ps5:    { top: '\u25B3', left: '\u25A1', right: '\u25CB', bottom: '\u00D7' },
+  xbox:   { top: 'Y', left: 'X', right: 'B', bottom: 'A' },
+};
+
+// ---------------------------------------------------------------------------
+// Platform switching
+// ---------------------------------------------------------------------------
+function getPlatform() { return document.getElementById('platform').value; }
+
+function updateFaceButtons() {
+  const p = getPlatform();
+  const labels = FACE_LABELS[p];
+  document.getElementById('face-top').textContent = labels.top;
+  document.getElementById('face-left').textContent = labels.left;
+  document.getElementById('face-right').textContent = labels.right;
+  document.getElementById('face-bottom').textContent = labels.bottom;
+}
+
+document.getElementById('platform').addEventListener('change', () => {
+  updateFaceButtons();
+  if (controllerId !== null) disconnectController();
+});
+
+// ---------------------------------------------------------------------------
+// Connection management
+// ---------------------------------------------------------------------------
+async function connectController() {
+  const platform = getPlatform();
+  try {
+    const res = await fetch(`${API}/controllers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ platform }),
+    });
+    if (!res.ok) { alert('Failed to create controller'); return; }
+    const data = await res.json();
+    controllerId = data.id;
+    setStatus(data.state);
+    document.getElementById('btn-connect').disabled = true;
+    document.getElementById('btn-disconnect').disabled = false;
+    startStatusPoll();
+    openWebSocket();
+  } catch (e) { alert('Error: ' + e.message); }
+}
+
+async function disconnectController() {
+  stopStatusPoll();
+  closeWebSocket();
+  if (controllerId !== null) {
+    try { await fetch(`${API}/controllers/${controllerId}`, { method: 'DELETE' }); } catch {}
+    controllerId = null;
+  }
+  setStatus('disconnected');
+  document.getElementById('btn-connect').disabled = false;
+  document.getElementById('btn-disconnect').disabled = true;
+}
+
+function setStatus(state) {
+  const badge = document.getElementById('status-badge');
+  badge.textContent = state.charAt(0).toUpperCase() + state.slice(1);
+  badge.className = 'status ' + state;
+}
+
+function startStatusPoll() {
+  stopStatusPoll();
+  statusPoll = setInterval(async () => {
+    if (controllerId === null) return;
+    try {
+      const res = await fetch(`${API}/controllers/${controllerId}`);
+      if (res.ok) { const d = await res.json(); setStatus(d.state); }
+    } catch {}
+  }, 2000);
+}
+
+function stopStatusPoll() {
+  if (statusPoll) { clearInterval(statusPoll); statusPoll = null; }
+}
+
+// ---------------------------------------------------------------------------
+// WebSocket (for sticks)
+// ---------------------------------------------------------------------------
+function openWebSocket() {
+  if (controllerId === null) return;
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(`${proto}//${location.host}/ws/controllers/${controllerId}/input`);
+  ws.onclose = () => { ws = null; };
+}
+
+function closeWebSocket() {
+  if (ws) { ws.close(); ws = null; }
+}
+
+function sendStickViaWS(leftX, leftY, rightX, rightY) {
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  ws.send(JSON.stringify({
+    buttons: {},
+    left_stick: { x: leftX, y: leftY },
+    right_stick: { x: rightX, y: rightY },
+  }));
+}
+
+// ---------------------------------------------------------------------------
+// Button press (REST)
+// ---------------------------------------------------------------------------
+function resolveButton(el) {
+  const raw = el.getAttribute('data-btn');
+  if (raw.startsWith('face-')) {
+    const pos = raw.replace('face-', '');
+    return FACE_MAP[getPlatform()][pos];
+  }
+  return raw;
+}
+
+function btnDown(el) {
+  if (controllerId === null) return;
+  el.classList.add('active');
+  const btn = resolveButton(el);
+  fetch(`${API}/controllers/${controllerId}/buttons`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ buttons: [btn], action: 'press', duration: 0.1 }),
+  }).catch(() => {});
+}
+
+function btnUp(el) {
+  el.classList.remove('active');
+}
+
+// ---------------------------------------------------------------------------
+// Stick drag
+// ---------------------------------------------------------------------------
+let stickState = { left: { x: 0, y: 0 }, right: { x: 0, y: 0 } };
+
+function initStick(side) {
+  const zone = document.getElementById('stick-' + side);
+  const knob = document.getElementById('knob-' + side);
+  const label = document.getElementById('stick-' + side + '-val');
+  let dragging = false;
+
+  function update(clientX, clientY) {
+    const rect = zone.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const maxR = rect.width / 2 - 22;
+    let dx = clientX - cx;
+    let dy = clientY - cy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > maxR) { dx = dx / dist * maxR; dy = dy / dist * maxR; }
+
+    knob.style.left = (rect.width / 2 + dx) + 'px';
+    knob.style.top = (rect.height / 2 + dy) + 'px';
+    knob.style.transform = 'translate(-50%, -50%)';
+
+    const x = Math.round(dx / maxR * 100);
+    const y = Math.round(-dy / maxR * 100);  // invert Y: up = positive
+    label.textContent = x + ', ' + y;
+    stickState[side] = { x, y };
+    sendStickViaWS(stickState.left.x, stickState.left.y, stickState.right.x, stickState.right.y);
+  }
+
+  function reset() {
+    knob.style.left = '50%';
+    knob.style.top = '50%';
+    knob.style.transform = 'translate(-50%, -50%)';
+    label.textContent = '0, 0';
+    stickState[side] = { x: 0, y: 0 };
+    sendStickViaWS(stickState.left.x, stickState.left.y, stickState.right.x, stickState.right.y);
+  }
+
+  // Mouse
+  knob.addEventListener('mousedown', (e) => { dragging = true; e.preventDefault(); });
+  window.addEventListener('mousemove', (e) => { if (dragging) update(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', () => { if (dragging) { dragging = false; reset(); } });
+
+  // Touch
+  knob.addEventListener('touchstart', (e) => { dragging = true; e.preventDefault(); });
+  window.addEventListener('touchmove', (e) => { if (dragging) { const t = e.touches[0]; update(t.clientX, t.clientY); } });
+  window.addEventListener('touchend', () => { if (dragging) { dragging = false; reset(); } });
+}
+
+// ---------------------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------------------
+updateFaceButtons();
+initStick('left');
+initStick('right');
+</script>
+</body>
+</html>
