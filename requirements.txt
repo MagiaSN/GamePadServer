@@ -1,7 +1,7 @@
 fastapi>=0.110.0
 uvicorn[standard]>=0.29.0
 websockets>=12.0
-nxbt>=0.1.4
+# dbus-python is a system dependency (apt install python3-dbus) — not pip-installable
 pydantic>=2.0.0
 pydantic-settings>=2.0.0
 pytest>=8.0.0

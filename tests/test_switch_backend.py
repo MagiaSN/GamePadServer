@@ -1,11 +1,15 @@
 import pytest
-from unittest.mock import MagicMock, patch, AsyncMock
+from unittest.mock import MagicMock, patch
 
 from gamepadserver.backends.switch import (
     SwitchBackend,
     _map_buttons,
     _BUTTON_MAP,
-    _NXBT_STATE_MAP,
+)
+from gamepadserver.bluetooth.switch_report import (
+    LEFT_STICK_CENTER_BYTES,
+    RIGHT_STICK_CENTER_BYTES,
+    stick_from_api,
 )
 from gamepadserver.core.models import ControllerState, InputState
 
@@ -29,8 +33,8 @@ class TestButtonMapping:
 
     def test_map_single(self):
         assert _map_buttons(["A"]) == ["A"]
-        assert _map_buttons(["L_STICK"]) == ["L_STICK_PRESS"]
-        assert _map_buttons(["R_STICK"]) == ["R_STICK_PRESS"]
+        assert _map_buttons(["L_STICK"]) == ["L_STICK"]
+        assert _map_buttons(["R_STICK"]) == ["R_STICK"]
 
     def test_map_multiple(self):
         result = _map_buttons(["A", "B", "L"])
@@ -41,138 +45,130 @@ class TestButtonMapping:
             _map_buttons(["CROSS"])
 
 
-class TestStateMapping:
-
-    def test_all_nxbt_states_mapped(self):
-        for state in ["initializing", "connecting", "reconnecting", "connected", "crashed"]:
-            assert state in _NXBT_STATE_MAP
-
-
 # ---------------------------------------------------------------------------
-# SwitchBackend with mocked nxbt
+# SwitchBackend with mocked bluetooth/ layer
 # ---------------------------------------------------------------------------
 
-def _make_mock_nxbt():
-    """Create a mock nxbt module and instance."""
-    mock_mod = MagicMock()
-    mock_mod.PRO_CONTROLLER = "PRO_CONTROLLER"
-    mock_mod.Sticks.LEFT_STICK = "L_STICK"
-    mock_mod.Sticks.RIGHT_STICK = "R_STICK"
-
-    # Mock Buttons with attribute access
-    for btn in ["A", "B", "X", "Y", "L", "R", "ZL", "ZR",
-                "PLUS", "MINUS", "HOME", "CAPTURE",
-                "DPAD_UP", "DPAD_DOWN", "DPAD_LEFT", "DPAD_RIGHT",
-                "L_STICK_PRESS", "R_STICK_PRESS"]:
-        setattr(mock_mod.Buttons, btn, btn)
-
-    mock_instance = MagicMock()
-    mock_instance.create_controller.return_value = 0
-    mock_instance.state = {0: {"state": "connected"}}
-    mock_instance.create_input_packet.return_value = {
-        "A": False, "B": False, "X": False, "Y": False,
-        "L": False, "R": False, "ZL": False, "ZR": False,
-        "PLUS": False, "MINUS": False, "HOME": False, "CAPTURE": False,
-        "DPAD_UP": False, "DPAD_DOWN": False, "DPAD_LEFT": False, "DPAD_RIGHT": False,
-        "L_STICK": {"X_VALUE": 0, "Y_VALUE": 0, "PRESSED": False},
-        "R_STICK": {"X_VALUE": 0, "Y_VALUE": 0, "PRESSED": False},
-    }
-    mock_mod.Nxbt.return_value = mock_instance
-
-    return mock_mod, mock_instance
-
-
-@pytest.fixture
-def backend_and_mocks():
-    mock_mod, mock_instance = _make_mock_nxbt()
+def _make_connected_backend() -> SwitchBackend:
+    """Create a SwitchBackend that appears connected (no real BT)."""
     backend = SwitchBackend()
-    backend._get_nxbt_module = lambda: mock_mod
-    # Simulate connected state
-    backend._nxbt = mock_instance
-    backend._controller_index = 0
-    return backend, mock_mod, mock_instance
-
-
-class TestSwitchBackendConnect:
-
-    @pytest.mark.asyncio
-    async def test_connect(self):
-        mock_mod, mock_instance = _make_mock_nxbt()
-        backend = SwitchBackend()
-        backend._get_nxbt_module = lambda: mock_mod
-
-        await backend.connect()
-
-        mock_mod.Nxbt.assert_called_once()
-        mock_instance.create_controller.assert_called_once_with(mock_mod.PRO_CONTROLLER)
-        mock_instance.wait_for_connection.assert_called_once_with(0)
-        assert backend._controller_index == 0
-
-    @pytest.mark.asyncio
-    async def test_disconnect(self, backend_and_mocks):
-        backend, _, mock_instance = backend_and_mocks
-        await backend.disconnect()
-        mock_instance.remove_controller.assert_called_once_with(0)
-        assert backend._nxbt is None
-        assert backend._controller_index is None
+    # Simulate connected state with mock objects
+    backend._conn = MagicMock()
+    backend._protocol = MagicMock()
+    backend._protocol.player_number = 1
+    backend._state = ControllerState.CONNECTED
+    return backend
 
 
 class TestSwitchBackendState:
 
     @pytest.mark.asyncio
-    async def test_get_state_connected(self, backend_and_mocks):
-        backend, _, _ = backend_and_mocks
-        state = await backend.get_state()
-        assert state == ControllerState.CONNECTED
-
-    @pytest.mark.asyncio
     async def test_get_state_disconnected(self):
         backend = SwitchBackend()
-        state = await backend.get_state()
-        assert state == ControllerState.DISCONNECTED
-
-
-class TestSwitchBackendInput:
+        assert await backend.get_state() == ControllerState.DISCONNECTED
 
     @pytest.mark.asyncio
-    async def test_press_buttons(self, backend_and_mocks):
-        backend, mock_mod, mock_instance = backend_and_mocks
-        await backend.press_buttons(["A", "B"], duration=0.2)
-        mock_instance.press_buttons.assert_called_once()
-        call_args = mock_instance.press_buttons.call_args
-        assert call_args[0][0] == 0  # controller_index
-        assert call_args[0][1] == ["A", "B"]  # mapped buttons
-        assert call_args[1]["down"] == 0.2
-
-    @pytest.mark.asyncio
-    async def test_set_stick(self, backend_and_mocks):
-        backend, mock_mod, mock_instance = backend_and_mocks
-        await backend.set_stick("left", 50, -30)
-        mock_instance.tilt_stick.assert_called_once()
-        call_args = mock_instance.tilt_stick.call_args
-        assert call_args[0][1] == mock_mod.Sticks.LEFT_STICK
-        assert call_args[0][2] == 50
-        assert call_args[0][3] == -30
-
-    @pytest.mark.asyncio
-    async def test_send_input(self, backend_and_mocks):
-        backend, _, mock_instance = backend_and_mocks
-        state = InputState(
-            buttons={"A": True, "L": True, "L_STICK": True},
-            left_stick=(80, -50),
-            right_stick=(0, 0),
-        )
-        await backend.send_input(state)
-        mock_instance.set_controller_input.assert_called_once()
-        packet = mock_instance.set_controller_input.call_args[0][1]
-        assert packet["A"] is True
-        assert packet["L"] is True
-        assert packet["L_STICK"]["PRESSED"] is True
-        assert packet["L_STICK"]["X_VALUE"] == 80
-        assert packet["L_STICK"]["Y_VALUE"] == -50
+    async def test_get_state_connected(self):
+        backend = _make_connected_backend()
+        assert await backend.get_state() == ControllerState.CONNECTED
 
     @pytest.mark.asyncio
     async def test_not_connected_raises(self):
         backend = SwitchBackend()
         with pytest.raises(RuntimeError, match="not connected"):
             await backend.press_buttons(["A"])
+
+
+class TestSwitchBackendButtons:
+
+    @pytest.mark.asyncio
+    async def test_hold_and_release(self):
+        backend = _make_connected_backend()
+
+        await backend.hold_buttons(["A", "B"])
+        assert "A" in backend._report.buttons
+        assert "B" in backend._report.buttons
+
+        await backend.release_buttons(["A"])
+        assert "A" not in backend._report.buttons
+        assert "B" in backend._report.buttons
+
+        await backend.release_buttons(["B"])
+        assert len(backend._report.buttons) == 0
+
+    @pytest.mark.asyncio
+    async def test_release_only_specified(self):
+        """release_buttons should not clear other held buttons."""
+        backend = _make_connected_backend()
+        await backend.hold_buttons(["L", "R", "A"])
+        await backend.release_buttons(["A"])
+        assert backend._report.buttons == {"L", "R"}
+
+
+class TestSwitchBackendStick:
+
+    @pytest.mark.asyncio
+    async def test_set_stick_center(self):
+        backend = _make_connected_backend()
+        await backend.set_stick("left", 0, 0)
+        assert backend._report.left_stick == stick_from_api(0, 0, "left")
+
+    @pytest.mark.asyncio
+    async def test_set_stick_extreme(self):
+        backend = _make_connected_backend()
+        await backend.set_stick("right", 100, -100)
+        assert backend._report.right_stick == stick_from_api(100, -100, "right")
+
+    @pytest.mark.asyncio
+    async def test_set_stick_left_vs_right(self):
+        backend = _make_connected_backend()
+        await backend.set_stick("left", 50, 50)
+        await backend.set_stick("right", -50, -50)
+        assert backend._report.left_stick == stick_from_api(50, 50, "left")
+        assert backend._report.right_stick == stick_from_api(-50, -50, "right")
+
+
+class TestSwitchBackendSendInput:
+
+    @pytest.mark.asyncio
+    async def test_send_input_applies_state(self):
+        backend = _make_connected_backend()
+        state = InputState(
+            buttons={"A": True, "L": True, "B": False},
+            left_stick=(80, -50),
+            right_stick=(0, 0),
+        )
+        await backend.send_input(state)
+        assert backend._report.buttons == {"A", "L"}
+        assert backend._report.left_stick == stick_from_api(80, -50, "left")
+        assert backend._report.right_stick == stick_from_api(0, 0, "right")
+
+    @pytest.mark.asyncio
+    async def test_send_input_clears_previous_buttons(self):
+        backend = _make_connected_backend()
+        # First frame: A pressed
+        await backend.send_input(InputState(buttons={"A": True}))
+        assert "A" in backend._report.buttons
+        # Second frame: A released, B pressed
+        await backend.send_input(InputState(buttons={"B": True}))
+        assert "A" not in backend._report.buttons
+        assert "B" in backend._report.buttons
+
+
+class TestSwitchBackendDisconnect:
+
+    @pytest.mark.asyncio
+    async def test_disconnect_cleans_up(self):
+        backend = _make_connected_backend()
+        backend._sdp = MagicMock()
+        backend._agent = MagicMock()
+        backend._keepalive_stop = MagicMock()
+        backend._keepalive_thread = None
+
+        await backend.disconnect()
+
+        assert backend._conn is None
+        assert backend._protocol is None
+        assert backend._sdp is None
+        assert backend._agent is None
+        assert await backend.get_state() == ControllerState.DISCONNECTED
