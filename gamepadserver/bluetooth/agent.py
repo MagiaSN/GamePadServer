@@ -28,6 +28,7 @@ class BlueZAgent:
         self._registered = False
         self._mainloop: Any = None
         self._loop_thread: threading.Thread | None = None
+        self._agent_obj: Any = None
 
     def register(self) -> None:
         """Register the agent with BlueZ and start the D-Bus listener."""
@@ -38,8 +39,9 @@ class BlueZAgent:
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
         bus = dbus.SystemBus()
 
-        # Create the Agent1 D-Bus object
-        _AutoAcceptAgent(bus, _AGENT_PATH)
+        # Create the Agent1 D-Bus object (keep a reference so we can
+        # remove it from the bus cleanly on unregister).
+        self._agent_obj = _AutoAcceptAgent(bus, _AGENT_PATH)
 
         mgr = dbus.Interface(
             bus.get_object("org.bluez", "/org/bluez"),
@@ -81,6 +83,16 @@ class BlueZAgent:
             log.info("Agent unregistered")
         except Exception:
             log.debug("UnregisterAgent failed (may already be gone)")
+
+        # Remove the dbus service object from the bus so we can
+        # re-register cleanly on the next connection.
+        if self._agent_obj is not None:
+            try:
+                self._agent_obj.remove_from_bus()
+            except Exception as exc:
+                log.debug("Failed to remove agent from bus: %s", exc)
+            self._agent_obj = None
+
         self._registered = False
 
     def _start_mainloop(self) -> None:
@@ -178,3 +190,7 @@ class _AutoAcceptAgent:
                 log.info("Agent1.Cancel")
 
         self._impl = Impl()
+
+    def remove_from_bus(self) -> None:
+        """Remove the dbus service object from the bus."""
+        self._impl.remove_from_connection()

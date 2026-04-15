@@ -204,6 +204,11 @@ class SwitchBackend(GamepadBackend):
         while not self._keepalive_stop.is_set():
             try:
                 with self._send_lock:
+                    # Drain and respond to any post-handshake subcommands
+                    # from the Switch (it may send additional requests after
+                    # the initial handshake — ignoring them causes disconnect)
+                    self._protocol.process_incoming()
+                    # Send current input state
                     self._conn.send(self._report.standard_report())
             except OSError:
                 logger.warning("Keep-alive send failed — connection lost")
@@ -216,14 +221,18 @@ class SwitchBackend(GamepadBackend):
     # ------------------------------------------------------------------
 
     def _press_sync(self, buttons: list[str], duration: float) -> None:
-        self._report.buttons.update(buttons)
-        with self._send_lock:
-            self._conn.send(self._report.standard_report())
-        time.sleep(duration)
-        self._report.buttons.difference_update(buttons)
-        with self._send_lock:
-            self._conn.send(self._report.standard_report())
+        try:
+            self._report.buttons.update(buttons)
+            with self._send_lock:
+                self._conn.send(self._report.standard_report())
+            time.sleep(duration)
+            self._report.buttons.difference_update(buttons)
+            with self._send_lock:
+                self._conn.send(self._report.standard_report())
+        except OSError as exc:
+            self._state = ControllerState.ERROR
+            raise RuntimeError(f"Connection lost: {exc}") from exc
 
     def _ensure_connected(self) -> None:
-        if self._conn is None:
+        if self._conn is None or self._state != ControllerState.CONNECTED:
             raise RuntimeError("Switch controller is not connected.")

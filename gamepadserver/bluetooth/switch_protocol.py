@@ -123,6 +123,23 @@ class SwitchProtocol:
         """Send a standard report with current state (keep-alive)."""
         self.conn.send(self.report.standard_report())
 
+    def process_incoming(self) -> None:
+        """Read one incoming message (if any) and respond to subcommands.
+
+        Call this regularly after the handshake to keep the Switch happy —
+        it may send additional subcommand requests post-handshake.
+        Non-blocking: returns immediately if no data is available.
+        """
+        data = self.conn.recv(128)
+        if data:
+            parsed = parse_output(data)
+            if parsed and parsed["subcommand"]:
+                reply = self._handle_subcommand(
+                    parsed["subcommand"], parsed["subcmd_data"]
+                )
+                if reply is not None:
+                    self.conn.send(reply)
+
     # ------------------------------------------------------------------
     # Subcommand handlers
     # ------------------------------------------------------------------

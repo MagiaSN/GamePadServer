@@ -96,6 +96,7 @@ class SDPService:
         # Listening sockets (for cleanup)
         self._listen_ctrl: socket.socket | None = None
         self._listen_itr: socket.socket | None = None
+        self._profile_obj: Any = None
 
     def register(self) -> None:
         """Register the HID profile with BlueZ (for SDP advertisement only)."""
@@ -109,7 +110,8 @@ class SDPService:
 
         # We still need a Profile1 object on the bus even though we
         # don't use NewConnection — BlueZ requires one for RegisterProfile.
-        _Profile1(bus, _PROFILE_PATH)
+        # Keep a reference so we can remove it on unregister.
+        self._profile_obj = _Profile1(bus, _PROFILE_PATH)
 
         manager = dbus.Interface(
             bus.get_object("org.bluez", "/org/bluez"),
@@ -220,6 +222,16 @@ class SDPService:
             log.info("HID profile unregistered")
         except Exception:
             log.debug("UnregisterProfile failed (may already be gone)")
+
+        # Remove the dbus service object from the bus so we can re-register
+        # on the next connection attempt.
+        if self._profile_obj is not None:
+            try:
+                self._profile_obj.remove_from_bus()
+            except Exception as exc:
+                log.debug("Failed to remove profile from bus: %s", exc)
+            self._profile_obj = None
+
         self._registered = False
 
 
@@ -264,3 +276,7 @@ class _Profile1:
                 log.info("Profile1.Release")
 
         self._impl = Impl()
+
+    def remove_from_bus(self) -> None:
+        """Remove the dbus service object from the bus."""
+        self._impl.remove_from_connection()

@@ -78,6 +78,14 @@ class TestSwitchBackendState:
         with pytest.raises(RuntimeError, match="not connected"):
             await backend.press_buttons(["A"])
 
+    @pytest.mark.asyncio
+    async def test_error_state_raises(self):
+        """Backend in ERROR state should reject commands even if _conn exists."""
+        backend = _make_connected_backend()
+        backend._state = ControllerState.ERROR
+        with pytest.raises(RuntimeError, match="not connected"):
+            await backend.press_buttons(["A"])
+
 
 class TestSwitchBackendButtons:
 
