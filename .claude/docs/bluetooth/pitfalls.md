@@ -7,6 +7,12 @@
 Each section follows: **Symptom** > **Investigation** > **Root cause** >
 **Fix** > **Lesson**.
 
+> **Reference capture:** `captures/switch_connect_success.btsnoop`
+> is a known-good btmon trace of the full Switch flow (SSP → L2CAP →
+> handshake → HOME press → disconnect). When a run fails, diff the
+> new trace against this one to localize the divergence. See
+> `captures/README.md` for details.
+
 ---
 
 ## SSP pairing: Agent required

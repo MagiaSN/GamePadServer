@@ -1,0 +1,2203 @@
+Bluetooth monitor ver 5.82
+btmon[334575]: = Note: Linux version 6.12.47+rpt-rpi-v8 (aarch64)      0.071667
+btmon[334575]: = Note: Bluetooth subsystem version 2.22                0.071675
+= New Index: B8:27:EB:52:0C:A4 (Primary,UART,hci0)              [hci0] 0.071679
+= Open Index: B8:27:EB:52:0C:A4                                 [hci0] 0.071680
+= Index Info: B8:27:EB:52:0C:A4 (Broadcom Corporation)          [hci0] 0.071682
+bluetoothd[334498]: @ MGMT Open:.. (privileged) version 1.23  {0x0001} 0.071686
+bluetoothctl[334581]: @ MGMT Ope.. (privileged) version 1.23  {0x0002} 1.333608
+bluetoothctl[334581]: @ MGMT Close: bluetoothctl              {0x0002} 1.347128
+hciconfig[334582]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.360729
+hciconfig[334582]: @ RAW Open: hciconfig               {0x0003} [hci0] 1.360979
+hciconfig[334582]: < HCI Command: Re.. (0x03|0x0014) plen 0  #1 [hci0] 1.361051
+> HCI Event: Command Complete (0x0e) plen 252                #2 [hci0] 1.364173
+      Read Local Name (0x03|0x0014) ncmd 1
+        Status: Success (0x00)
+        Name: Pro Controller
+hciconfig[334582]: @ RAW Close: hciconfig              {0x0003} [hci0] 1.364306
+hciconfig[334582]: @ RAW Open: hciconfig               {0x0003} [hci0] 1.364448
+hciconfig[334582]: < HCI Command: Re.. (0x03|0x0023) plen 0  #3 [hci0] 1.364562
+> HCI Event: Command Complete (0x0e) plen 7                  #4 [hci0] 1.364965
+      Read Class of Device (0x03|0x0023) ncmd 1
+        Status: Success (0x00)
+        Class: 0x6c0000
+          Major class: Miscellaneous
+          Minor class: 0x00
+          Rendering (Printing, Speaker)
+          Capturing (Scanner, Microphone)
+          Audio (Speaker, Microphone, Headset)
+          Telephony (Cordless telephony, Modem, Headset)
+hciconfig[334582]: @ RAW Close: hciconfig              {0x0003} [hci0] 1.365085
+hciconfig[334582]: @ RAW Open: hciconfig               {0x0003} [hci0] 1.365205
+hciconfig[334582]: < HCI Command: Re.. (0x04|0x0001) plen 0  #5 [hci0] 1.365311
+> HCI Event: Command Complete (0x0e) plen 12                 #6 [hci0] 1.365764
+      Read Local Version Information (0x04|0x0001) ncmd 1
+        Status: Success (0x00)
+        HCI version: Bluetooth 4.1 (0x07) - Revision 508 (0x01fc)
+        LMP version: Bluetooth 4.1 (0x07) - Subversion 8713 (0x2209)
+        Manufacturer: Broadcom Corporation (15)
+          Firmware: 001.002.009
+          Build: 0508
+hciconfig[334582]: @ RAW Close: hciconfig              {0x0003} [hci0] 1.365827
+hciconfig[334582]: @ RAW Close: hciconfig                     {0x0002} 1.365852
+hciconfig[334583]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.370745
+hciconfig[334583]: @ RAW Close: hciconfig                     {0x0002} 1.370816
+hciconfig[334584]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.374324
+< HCI Command: Write Scan Enable (0x03|0x001a) plen 1        #7 [hci0] 1.374463
+        Scan enable: Inquiry Scan + Page Scan (0x03)
+> HCI Event: Command Complete (0x0e) plen 4                  #8 [hci0] 1.374888
+      Write Scan Enable (0x03|0x001a) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: New Settings (0x0006) plen 4             {0x0001} [hci0] 1.374974
+        Current settings: 0x00000adb
+          Powered
+          Connectable
+          Discoverable
+          Bondable
+          Secure Simple Pairing
+          BR/EDR
+          Low Energy
+          Secure Connections
+hciconfig[334584]: @ RAW Close: hciconfig                     {0x0002} 1.375000
+< HCI Command: LE Set Advertising D.. (0x08|0x0008) plen 32  #9 [hci0] 1.375563
+        Length: 6
+        Flags: 0x02
+          LE General Discoverable Mode
+        TX power: 12 dBm
+> HCI Event: Command Complete (0x0e) plen 4                 #10 [hci0] 1.376444
+      LE Set Advertising Data (0x08|0x0008) ncmd 1
+        Status: Success (0x00)
+hciconfig[334585]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.378903
+hciconfig[334585]: @ RAW Open: hciconfig               {0x0003} [hci0] 1.378982
+hciconfig[334585]: < HCI Command: W.. (0x03|0x0024) plen 3  #11 [hci0] 1.379062
+        Class: 0x002508
+          Major class: Peripheral (mouse, joystick, keyboards)
+          Minor class: 0x02
+          Limited Discoverable Mode
+> HCI Event: Command Complete (0x0e) plen 4                 #12 [hci0] 1.379666
+      Write Class of Device (0x03|0x0024) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Class Of Device Changed (0x0007) plen 3  {0x0001} [hci0] 1.379727
+        Class: 0x002508
+          Major class: Peripheral (mouse, joystick, keyboards)
+          Minor class: 0x02
+          Limited Discoverable Mode
+hciconfig[334585]: @ RAW Close: hciconfig              {0x0003} [hci0] 1.379794
+hciconfig[334585]: @ RAW Close: hciconfig                     {0x0002} 1.379836
+hciconfig[334586]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.383588
+hciconfig[334586]: @ RAW Open: hciconfig               {0x0003} [hci0] 1.383996
+hciconfig[334586]: < HCI Command:.. (0x03|0x0013) plen 248  #13 [hci0] 1.384064
+        Name: Pro Controller
+> HCI Event: Command Complete (0x0e) plen 4                 #14 [hci0] 1.387338
+      Write Local Name (0x03|0x0013) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Local Name Changed (0x0008) plen 260     {0x0001} [hci0] 1.387439
+        Name: Pro Controller
+        Short name: 
+hciconfig[334586]: @ RAW Close: hciconfig              {0x0003} [hci0] 1.387788
+hciconfig[334586]: @ RAW Close: hciconfig                     {0x0002} 1.387881
+hciconfig[334587]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.391403
+hciconfig[334587]: @ RAW Close: hciconfig                     {0x0002} 1.391727
+hciconfig[334588]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.395211
+hciconfig[334588]: @ RAW Close: hciconfig                     {0x0002} 1.395642
+bluetoothd[334498]: @ MGMT Command:.. (0x0018) plen 1  {0x0001} [hci0] 1.495272
+        Capability: NoInputNoOutput (0x03)
+@ MGMT Event: Command Complete (0x0001) plen 3         {0x0001} [hci0] 1.495302
+      Set IO Capability (0x0018) plen 0
+        Status: Success (0x00)
+bluetoothd[334498]: @ MGMT Command.. (0x0010) plen 17  {0x0001} [hci0] 1.714402
+        UUID: Human Interface Device Service
+        Service class: 0x00
+< HCI Command: Write Class of Device (0x03|0x0024) plen 3   #15 [hci0] 1.714726
+        Class: 0x6c0000
+          Major class: Miscellaneous
+          Minor class: 0x00
+          Rendering (Printing, Speaker)
+          Capturing (Scanner, Microphone)
+          Audio (Speaker, Microphone, Headset)
+          Telephony (Cordless telephony, Modem, Headset)
+> HCI Event: Command Complete (0x0e) plen 4                 #16 [hci0] 1.715166
+      Write Class of Device (0x03|0x0024) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Class Of Device Changed (0x0007) plen 3  {0x0001} [hci0] 1.715220
+        Class: 0x6c0000
+          Major class: Miscellaneous
+          Minor class: 0x00
+          Rendering (Printing, Speaker)
+          Capturing (Scanner, Microphone)
+          Audio (Speaker, Microphone, Headset)
+          Telephony (Cordless telephony, Modem, Headset)
+< HCI Command: Write Extended Inq.. (0x03|0x0052) plen 241  #17 [hci0] 1.715349
+        FEC: Not required (0x00)
+        Name (complete): Pro Controller
+        TX power: 0 dBm
+        Device ID: USB Implementer's Forum assigned (0x0002)
+          Vendor: Linux Foundation (0x1d6b)
+          Product: 0x0246
+          Version: 5.5.2 (0x0552)
+        16-bit Service UUIDs (complete): 11 entries
+          Generic Access Profile (0x1800)
+          Generic Attribute Profile (0x1801)
+          Device Information (0x180a)
+          A/V Remote Control (0x110e)
+          A/V Remote Control Target (0x110c)
+          SIM Access (0x112d)
+          Handsfree Audio Gateway (0x111f)
+          Handsfree (0x111e)
+          Audio Source (0x110a)
+          Audio Sink (0x110b)
+          Human Interface Device Service (0x1124)
+        128-bit Service UUIDs (complete): 1 entry
+          Vendor specific
+> HCI Event: Command Complete (0x0e) plen 4                 #18 [hci0] 1.718884
+      Write Extended Inquiry Response (0x03|0x0052) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Command Complete (0x0001) plen 6         {0x0001} [hci0] 1.719012
+      Add UUID (0x0010) plen 3
+        Status: Success (0x00)
+        Class: 0x6c0000
+          Major class: Miscellaneous
+          Minor class: 0x00
+          Rendering (Printing, Speaker)
+          Capturing (Scanner, Microphone)
+          Audio (Speaker, Microphone, Headset)
+          Telephony (Cordless telephony, Modem, Headset)
+hciconfig[334590]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.721176
+hciconfig[334590]: @ RAW Open: hciconfig               {0x0003} [hci0] 1.721252
+hciconfig[334590]: < HCI Command: W.. (0x03|0x0024) plen 3  #19 [hci0] 1.721335
+        Class: 0x002508
+          Major class: Peripheral (mouse, joystick, keyboards)
+          Minor class: 0x02
+          Limited Discoverable Mode
+> HCI Event: Command Complete (0x0e) plen 4                 #20 [hci0] 1.722176
+      Write Class of Device (0x03|0x0024) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Class Of Device Changed (0x0007) plen 3  {0x0001} [hci0] 1.722617
+        Class: 0x002508
+          Major class: Peripheral (mouse, joystick, keyboards)
+          Minor class: 0x02
+          Limited Discoverable Mode
+hciconfig[334590]: @ RAW Close: hciconfig              {0x0003} [hci0] 1.722769
+hciconfig[334590]: @ RAW Close: hciconfig                     {0x0002} 1.722834
+hciconfig[334591]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.728435
+< HCI Command: Write Scan Enable (0x03|0x001a) plen 1       #21 [hci0] 1.728899
+        Scan enable: Inquiry Scan + Page Scan (0x03)
+> HCI Event: Command Complete (0x0e) plen 4                 #22 [hci0] 1.729338
+      Write Scan Enable (0x03|0x001a) ncmd 1
+        Status: Success (0x00)
+hciconfig[334591]: @ RAW Close: hciconfig                     {0x0002} 1.729520
+hciconfig[334592]: @ RAW Open: h.. (privileged) version 2.22  {0x0002} 1.732688
+hciconfig[334592]: @ RAW Open: hciconfig               {0x0003} [hci0] 1.732762
+hciconfig[334592]: < HCI Command: W.. (0x03|0x0024) plen 3  #23 [hci0] 1.732842
+        Class: 0x002508
+          Major class: Peripheral (mouse, joystick, keyboards)
+          Minor class: 0x02
+          Limited Discoverable Mode
+> HCI Event: Command Complete (0x0e) plen 4                 #24 [hci0] 1.733255
+      Write Class of Device (0x03|0x0024) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Class Of Device Changed (0x0007) plen 3  {0x0001} [hci0] 1.733300
+        Class: 0x002508
+          Major class: Peripheral (mouse, joystick, keyboards)
+          Minor class: 0x02
+          Limited Discoverable Mode
+hciconfig[334592]: @ RAW Close: hciconfig              {0x0003} [hci0] 1.733395
+hciconfig[334592]: @ RAW Close: hciconfig                     {0x0002} 1.733437
+> HCI Event: Connect Request (0x04) plen 10                #25 [hci0] 10.897824
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection R.. (0x01|0x0009) plen 7  #26 [hci0] 10.897986
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                  #27 [hci0] 10.898599
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                     #28 [hci0] 11.057923
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11               #29 [hci0] 11.084353
+        Status: Success (0x00)
+        Handle: 11
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22   {0x0003} 11.085091
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 11.085091
+btmon[334575]: @ RAW Close: btmon                            {0x0002} 11.085125
+btmon[328892]: @ RAW Close: btmon                            {0x0003} 11.085133
+< HCI Command: Read Remote Support.. (0x01|0x001b) plen 2  #30 [hci0] 11.085855
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Status (0x0f) plen 4                  #31 [hci0] 11.086789
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Supported Featu.. (0x0b) plen 11  #32 [hci0] 11.087033
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+< HCI Command: Read Remote Extende.. (0x01|0x001c) plen 3  #33 [hci0] 11.087097
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+> HCI Event: Max Slots Change (0x1b) plen 3                #34 [hci0] 11.087141
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+> HCI Event: Command Status (0x0f) plen 4                  #35 [hci0] 11.088946
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Features (0x23) plen 13  #36 [hci0] 11.088962
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+< HCI Command: Remote Name Request (0x01|0x0019) plen 10   #37 [hci0] 11.089115
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 11 flags 0x00 dlen 10                #38 [hci0] 11.089147
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                  #39 [hci0] 11.090085
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10                #40 [hci0] 11.099577
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 11 flags 0x00 dlen 16                #41 [hci0] 11.099679
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 11 flags 0x02 dlen 16                #42 [hci0] 11.101838
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 11 flags 0x00 dlen 10                #43 [hci0] 11.102079
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255      #44 [hci0] 11.106050
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35       {0x0001} [hci0] 11.106187
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #45 [hci0] 11.106072
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #38: len 10 (5 Kb/s)
+        Latency: 16 msec (16-16 msec ~16 msec)
+        #41: len 16 (21 Kb/s)
+        Latency: 6 msec (6-16 msec ~11 msec)
+> HCI Event: IO Capability Response (0x32) plen 9          #46 [hci0] 11.106075
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6           #47 [hci0] 11.106097
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: IO Capability Reque.. (0x01|0x002b) plen 9  #48 [hci0] 11.106287
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10                #49 [hci0] 11.106383
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+< ACL Data TX: Handle 11 flags 0x00 dlen 20                #50 [hci0] 11.106443
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+> ACL Data RX: Handle 11 flags 0x02 dlen 20                #51 [hci0] 11.110178
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+> HCI Event: Command Complete (0x0e) plen 10               #52 [hci0] 11.110208
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #53 [hci0] 11.129399
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #43: len 10 (2 Kb/s)
+        Latency: 27 msec (6-27 msec ~19 msec)
+        #50: len 20 (7 Kb/s)
+        Latency: 22 msec (6-27 msec ~21 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10      #54 [hci0] 11.365007
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 175875
+< HCI Command: User Confirmation R.. (0x01|0x002c) plen 6  #55 [hci0] 11.365075
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10               #56 [hci0] 11.365895
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7         #57 [hci0] 11.379429
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23          #58 [hci0] 11.419078
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: 4405a949385a311cb2b52e3cf32d39d2
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26           {0x0001} [hci0] 11.419137
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: 4405a949385a311cb2b52e3cf32d39d2
+        PIN length: 0
+bluetoothd[334498]: @ MGMT Command.. (0x0033) plen 8  {0x0001} [hci0] 11.420327
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Action: Allow incoming connection (0x01)
+@ MGMT Event: Device Flags Changed (0x002a) plen 15   {0x0001} [hci0] 11.420379
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Supported Flags: 0x00000001
+          Remote Wakeup
+        Current Flags: 0x00000000
+@ MGMT Event: Command Complete (0x0001) plen 10       {0x0001} [hci0] 11.420390
+      Add Device (0x0033) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Disconnect Complete (0x05) plen 4             #59 [hci0] 13.770343
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8     {0x0001} [hci0] 13.770416
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
+> HCI Event: Connect Request (0x04) plen 10                #60 [hci0] 31.368902
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection R.. (0x01|0x0009) plen 7  #61 [hci0] 31.369057
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                  #62 [hci0] 31.369663
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                     #63 [hci0] 31.529151
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11               #64 [hci0] 31.558049
+        Status: Success (0x00)
+        Handle: 12
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+< HCI Command: Read Remote Support.. (0x01|0x001b) plen 2  #65 [hci0] 31.558455
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 31.559387
+btmon[328892]: @ RAW Close: btmon                            {0x0002} 31.559422
+> HCI Event: Command Status (0x0f) plen 4                  #66 [hci0] 31.560722
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Supported Featu.. (0x0b) plen 11  #67 [hci0] 31.560746
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+> HCI Event: Max Slots Change (0x1b) plen 3                #68 [hci0] 31.560748
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+< HCI Command: Read Remote Extende.. (0x01|0x001c) plen 3  #69 [hci0] 31.560880
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 31.561469
+btmon[334575]: @ RAW Close: btmon                            {0x0002} 31.561500
+> HCI Event: Command Status (0x0f) plen 4                  #70 [hci0] 31.561673
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Features (0x23) plen 13  #71 [hci0] 31.561865
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+< HCI Command: Remote Name Request (0x01|0x0019) plen 10   #72 [hci0] 31.561964
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 12 flags 0x00 dlen 10                #73 [hci0] 31.561996
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                  #74 [hci0] 31.562950
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10                #75 [hci0] 31.567962
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 12 flags 0x00 dlen 16                #76 [hci0] 31.568073
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 12 flags 0x02 dlen 16                #77 [hci0] 31.571789
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 12 flags 0x00 dlen 10                #78 [hci0] 31.571872
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255      #79 [hci0] 31.577019
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35       {0x0001} [hci0] 31.577096
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #80 [hci0] 31.578402
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #73: len 10 (5 Kb/s)
+        Latency: 16 msec (16-16 msec ~16 msec)
+        #76: len 16 (12 Kb/s)
+        Latency: 10 msec (10-16 msec ~13 msec)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10                #81 [hci0] 31.578429
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: IO Capability Response (0x32) plen 9          #82 [hci0] 31.578432
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6           #83 [hci0] 31.578435
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 12 flags 0x02 dlen 20                #84 [hci0] 31.578437
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+< ACL Data TX: Handle 12 flags 0x00 dlen 20                #85 [hci0] 31.578601
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+< HCI Command: IO Capability Reque.. (0x01|0x002b) plen 9  #86 [hci0] 31.578631
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: Command Complete (0x0e) plen 10               #87 [hci0] 31.579566
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #88 [hci0] 31.583144
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #78: len 10 (7 Kb/s)
+        Latency: 11 msec (10-16 msec ~12 msec)
+        #85: len 20 (40 Kb/s)
+        Latency: 4 msec (4-16 msec ~8 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10      #89 [hci0] 31.841211
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 541063
+@ MGMT Event: User Confirmation R.. (0x000f) plen 12  {0x0001} [hci0] 31.841272
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Confirm hint: 0x01
+        Value: 0x00084187
+bluetoothd[334498]: @ MGMT Command.. (0x001c) plen 7  {0x0001} [hci0] 31.842288
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: User Confirmation R.. (0x01|0x002c) plen 6  #90 [hci0] 31.842709
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10               #91 [hci0] 31.843237
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+@ MGMT Event: Command Complete (0x0001) plen 10       {0x0001} [hci0] 31.843285
+      User Confirmation Reply (0x001c) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7         #92 [hci0] 31.856872
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23          #93 [hci0] 31.892771
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: 39b7f452e3c7a50fa280f19957c23ca0
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26           {0x0001} [hci0] 31.892836
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: 39b7f452e3c7a50fa280f19957c23ca0
+        PIN length: 0
+> HCI Event: Disconnect Complete (0x05) plen 4             #94 [hci0] 34.247800
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8     {0x0001} [hci0] 34.247878
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
+> HCI Event: Connect Request (0x04) plen 10                #95 [hci0] 46.736346
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection R.. (0x01|0x0009) plen 7  #96 [hci0] 46.736489
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                  #97 [hci0] 46.738338
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                     #98 [hci0] 46.897834
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11               #99 [hci0] 46.920525
+        Status: Success (0x00)
+        Handle: 11
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22   {0x0003} 46.921475
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 46.921475
+btmon[328892]: @ RAW Close: btmon                            {0x0003} 46.921504
+btmon[334575]: @ RAW Close: btmon                            {0x0002} 46.921505
+< HCI Command: Read Remote Suppor.. (0x01|0x001b) plen 2  #100 [hci0] 46.922082
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Status (0x0f) plen 4                 #101 [hci0] 46.922885
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Supported Feat.. (0x0b) plen 11  #102 [hci0] 46.923623
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+> HCI Event: Max Slots Change (0x1b) plen 3               #103 [hci0] 46.923641
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+< HCI Command: Read Remote Extend.. (0x01|0x001c) plen 3  #104 [hci0] 46.923726
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+> HCI Event: Command Status (0x0f) plen 4                 #105 [hci0] 46.925553
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Featu.. (0x23) plen 13  #106 [hci0] 46.925572
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+< HCI Command: Remote Name Request (0x01|0x0019) plen 10  #107 [hci0] 46.925718
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 11 flags 0x00 dlen 10               #108 [hci0] 46.925797
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                 #109 [hci0] 46.926922
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10               #110 [hci0] 46.930439
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 11 flags 0x00 dlen 16               #111 [hci0] 46.930511
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 11 flags 0x02 dlen 16               #112 [hci0] 46.939540
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 11 flags 0x00 dlen 10               #113 [hci0] 46.939641
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255     #114 [hci0] 46.940694
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35       {0x0001} [hci0] 46.940760
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #115 [hci0] 46.940797
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #108: len 10 (5 Kb/s)
+        Latency: 15 msec (15-15 msec ~15 msec)
+        #111: len 16 (12 Kb/s)
+        Latency: 10 msec (10-15 msec ~12 msec)
+> HCI Event: IO Capability Response (0x32) plen 9         #116 [hci0] 46.942637
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6          #117 [hci0] 46.942669
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10               #118 [hci0] 46.942674
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+< HCI Command: IO Capability Requ.. (0x01|0x002b) plen 9  #119 [hci0] 46.942817
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+< ACL Data TX: Handle 11 flags 0x00 dlen 20               #120 [hci0] 46.942856
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+> HCI Event: Command Complete (0x0e) plen 10              #121 [hci0] 46.944995
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 11 flags 0x02 dlen 20               #122 [hci0] 46.945037
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #123 [hci0] 46.968064
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #113: len 10 (2 Kb/s)
+        Latency: 28 msec (10-28 msec ~20 msec)
+        #120: len 20 (6 Kb/s)
+        Latency: 25 msec (10-28 msec ~22 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10     #124 [hci0] 47.203681
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 712946
+@ MGMT Event: User Confirmation R.. (0x000f) plen 12  {0x0001} [hci0] 47.204269
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Confirm hint: 0x01
+        Value: 0x000ae0f2
+bluetoothd[334498]: @ MGMT Command.. (0x001c) plen 7  {0x0001} [hci0] 47.204532
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: User Confirmation... (0x01|0x002c) plen 6  #125 [hci0] 47.204585
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10              #126 [hci0] 47.205157
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+@ MGMT Event: Command Complete (0x0001) plen 10       {0x0001} [hci0] 47.205207
+      User Confirmation Reply (0x001c) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7        #127 [hci0] 47.218079
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23         #128 [hci0] 47.257732
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: fd0f853666814faff53e3683390ae0dc
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26           {0x0001} [hci0] 47.257801
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: fd0f853666814faff53e3683390ae0dc
+        PIN length: 0
+> HCI Event: Disconnect Complete (0x05) plen 4            #129 [hci0] 49.598999
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8     {0x0001} [hci0] 49.599071
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
+> HCI Event: Connect Request (0x04) plen 10               #130 [hci0] 62.093965
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection... (0x01|0x0009) plen 7  #131 [hci0] 62.094101
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                 #132 [hci0] 62.095350
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                    #133 [hci0] 62.254042
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11              #134 [hci0] 62.281736
+        Status: Success (0x00)
+        Handle: 12
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+< HCI Command: Read Remote Suppor.. (0x01|0x001b) plen 2  #135 [hci0] 62.282170
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 62.282532
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22   {0x0003} 62.282532
+btmon[334575]: @ RAW Close: btmon                            {0x0002} 62.282560
+btmon[328892]: @ RAW Close: btmon                            {0x0003} 62.282560
+> HCI Event: Command Status (0x0f) plen 4                 #136 [hci0] 62.283634
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Supported Feat.. (0x0b) plen 11  #137 [hci0] 62.283650
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+< HCI Command: Read Remote Extend.. (0x01|0x001c) plen 3  #138 [hci0] 62.283753
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+> HCI Event: Max Slots Change (0x1b) plen 3               #139 [hci0] 62.284308
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+> HCI Event: Command Status (0x0f) plen 4                 #140 [hci0] 62.284422
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Featu.. (0x23) plen 13  #141 [hci0] 62.284552
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+< HCI Command: Remote Name Request (0x01|0x0019) plen 10  #142 [hci0] 62.284630
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 12 flags 0x00 dlen 10               #143 [hci0] 62.284661
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                 #144 [hci0] 62.286902
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10               #145 [hci0] 62.292880
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 12 flags 0x00 dlen 16               #146 [hci0] 62.292964
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 12 flags 0x02 dlen 16               #147 [hci0] 62.296870
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 12 flags 0x00 dlen 10               #148 [hci0] 62.296948
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255     #149 [hci0] 62.301869
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35       {0x0001} [hci0] 62.301933
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #150 [hci0] 62.303145
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #143: len 10 (4 Kb/s)
+        Latency: 18 msec (18-18 msec ~18 msec)
+        #146: len 16 (12 Kb/s)
+        Latency: 10 msec (10-18 msec ~14 msec)
+> HCI Event: IO Capability Response (0x32) plen 9         #151 [hci0] 62.303171
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6          #152 [hci0] 62.303173
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10               #153 [hci0] 62.303177
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+> ACL Data RX: Handle 12 flags 0x02 dlen 20               #154 [hci0] 62.303179
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+< ACL Data TX: Handle 12 flags 0x00 dlen 20               #155 [hci0] 62.303331
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+< HCI Command: IO Capability Requ.. (0x01|0x002b) plen 9  #156 [hci0] 62.303362
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: Command Complete (0x0e) plen 10              #157 [hci0] 62.305016
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #158 [hci0] 62.326774
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #148: len 10 (2 Kb/s)
+        Latency: 29 msec (10-29 msec ~22 msec)
+        #155: len 20 (6 Kb/s)
+        Latency: 23 msec (10-29 msec ~22 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10     #159 [hci0] 62.562405
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 104694
+@ MGMT Event: User Confirmation R.. (0x000f) plen 12  {0x0001} [hci0] 62.562479
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Confirm hint: 0x01
+        Value: 0x000198f6
+bluetoothd[334498]: @ MGMT Command.. (0x001c) plen 7  {0x0001} [hci0] 62.562847
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: User Confirmation... (0x01|0x002c) plen 6  #160 [hci0] 62.562918
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10              #161 [hci0] 62.564915
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+@ MGMT Event: Command Complete (0x0001) plen 10       {0x0001} [hci0] 62.565012
+      User Confirmation Reply (0x001c) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7        #162 [hci0] 62.576805
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23         #163 [hci0] 62.616454
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: 9907e84656990e148e43515e041020c9
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26           {0x0001} [hci0] 62.616553
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: 9907e84656990e148e43515e041020c9
+        PIN length: 0
+> HCI Event: Disconnect Complete (0x05) plen 4            #164 [hci0] 64.957746
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8     {0x0001} [hci0] 64.957852
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
+> HCI Event: Connect Request (0x04) plen 10               #165 [hci0] 77.450029
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection... (0x01|0x0009) plen 7  #166 [hci0] 77.450174
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                 #167 [hci0] 77.451465
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                    #168 [hci0] 77.610233
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11              #169 [hci0] 77.637945
+        Status: Success (0x00)
+        Handle: 11
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 77.638810
+btmon[328892]: @ RAW Close: btmon                            {0x0002} 77.638842
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 77.638970
+btmon[334575]: @ RAW Close: btmon                            {0x0002} 77.638990
+< HCI Command: Read Remote Suppor.. (0x01|0x001b) plen 2  #170 [hci0] 77.639416
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Status (0x0f) plen 4                 #171 [hci0] 77.640324
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Supported Feat.. (0x0b) plen 11  #172 [hci0] 77.640547
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+> HCI Event: Max Slots Change (0x1b) plen 3               #173 [hci0] 77.640559
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+< HCI Command: Read Remote Extend.. (0x01|0x001c) plen 3  #174 [hci0] 77.640616
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+> HCI Event: Command Status (0x0f) plen 4                 #175 [hci0] 77.642704
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Featu.. (0x23) plen 13  #176 [hci0] 77.642725
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+< HCI Command: Remote Name Request (0x01|0x0019) plen 10  #177 [hci0] 77.642867
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 11 flags 0x00 dlen 10               #178 [hci0] 77.642943
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                 #179 [hci0] 77.644210
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10               #180 [hci0] 77.647859
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 11 flags 0x00 dlen 16               #181 [hci0] 77.647930
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 11 flags 0x02 dlen 16               #182 [hci0] 77.651651
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 11 flags 0x00 dlen 10               #183 [hci0] 77.651720
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255     #184 [hci0] 77.659551
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35       {0x0001} [hci0] 77.659670
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #185 [hci0] 77.659574
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #178: len 10 (5 Kb/s)
+        Latency: 16 msec (16-16 msec ~16 msec)
+        #181: len 16 (11 Kb/s)
+        Latency: 11 msec (11-16 msec ~14 msec)
+> HCI Event: IO Capability Response (0x32) plen 9         #186 [hci0] 77.659576
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6          #187 [hci0] 77.659578
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10               #188 [hci0] 77.659582
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+> ACL Data RX: Handle 11 flags 0x02 dlen 20               #189 [hci0] 77.659585
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+< ACL Data TX: Handle 11 flags 0x00 dlen 20               #190 [hci0] 77.659806
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+< HCI Command: IO Capability Requ.. (0x01|0x002b) plen 9  #191 [hci0] 77.659858
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: Command Complete (0x0e) plen 10              #192 [hci0] 77.663614
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #193 [hci0] 77.682988
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #183: len 10 (2 Kb/s)
+        Latency: 31 msec (11-31 msec ~22 msec)
+        #190: len 20 (6 Kb/s)
+        Latency: 23 msec (11-31 msec ~22 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10     #194 [hci0] 77.914849
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 058138
+@ MGMT Event: User Confirmation R.. (0x000f) plen 12  {0x0001} [hci0] 77.914921
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Confirm hint: 0x01
+        Value: 0x0000e31a
+bluetoothd[334498]: @ MGMT Command.. (0x001c) plen 7  {0x0001} [hci0] 77.915216
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: User Confirmation... (0x01|0x002c) plen 6  #195 [hci0] 77.915271
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10              #196 [hci0] 77.916398
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+@ MGMT Event: Command Complete (0x0001) plen 10       {0x0001} [hci0] 77.916467
+      User Confirmation Reply (0x001c) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7        #197 [hci0] 77.929267
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23         #198 [hci0] 77.968907
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: c12a372717e31a35edd726d5b8db09e9
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26           {0x0001} [hci0] 77.968975
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: c12a372717e31a35edd726d5b8db09e9
+        PIN length: 0
+> HCI Event: Disconnect Complete (0x05) plen 4            #199 [hci0] 80.317672
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8     {0x0001} [hci0] 80.317744
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
+> HCI Event: Connect Request (0x04) plen 10               #200 [hci0] 92.808728
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection... (0x01|0x0009) plen 7  #201 [hci0] 92.808864
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                 #202 [hci0] 92.810156
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                    #203 [hci0] 92.968965
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11              #204 [hci0] 92.991655
+        Status: Success (0x00)
+        Handle: 12
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+< HCI Command: Read Remote Suppor.. (0x01|0x001b) plen 2  #205 [hci0] 92.992076
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 92.992449
+btmon[328892]: @ RAW Close: btmon                            {0x0002} 92.992479
+> HCI Event: Command Status (0x0f) plen 4                 #206 [hci0] 92.992837
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Supported Feat.. (0x0b) plen 11  #207 [hci0] 92.992918
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+< HCI Command: Read Remote Extend.. (0x01|0x001c) plen 3  #208 [hci0] 92.992961
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22   {0x0002} 92.993271
+btmon[334575]: @ RAW Close: btmon                            {0x0002} 92.993306
+> HCI Event: Command Status (0x0f) plen 4                 #209 [hci0] 92.993626
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Featu.. (0x23) plen 13  #210 [hci0] 92.995179
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+> HCI Event: Max Slots Change (0x1b) plen 3               #211 [hci0] 92.995200
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+< HCI Command: Remote Name Request (0x01|0x0019) plen 10  #212 [hci0] 92.995322
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 12 flags 0x00 dlen 10               #213 [hci0] 92.995353
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                 #214 [hci0] 92.996181
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10               #215 [hci0] 93.001582
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 12 flags 0x00 dlen 16               #216 [hci0] 93.001666
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 12 flags 0x02 dlen 16               #217 [hci0] 93.007626
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 12 flags 0x00 dlen 10               #218 [hci0] 93.007717
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255     #219 [hci0] 93.011551
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35       {0x0001} [hci0] 93.011635
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #220 [hci0] 93.011563
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #213: len 10 (5 Kb/s)
+        Latency: 16 msec (16-16 msec ~16 msec)
+        #216: len 16 (14 Kb/s)
+        Latency: 9 msec (9-16 msec ~13 msec)
+> HCI Event: IO Capability Response (0x32) plen 9         #221 [hci0] 93.011565
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6          #222 [hci0] 93.011566
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10               #223 [hci0] 93.011572
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+> ACL Data RX: Handle 12 flags 0x02 dlen 20               #224 [hci0] 93.011664
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+< ACL Data TX: Handle 12 flags 0x00 dlen 20               #225 [hci0] 93.011771
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+< HCI Command: IO Capability Requ.. (0x01|0x002b) plen 9  #226 [hci0] 93.011818
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: Command Complete (0x0e) plen 10              #227 [hci0] 93.012883
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #228 [hci0] 93.017810
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #218: len 10 (8 Kb/s)
+        Latency: 10 msec (9-16 msec ~11 msec)
+        #225: len 20 (26 Kb/s)
+        Latency: 6 msec (6-16 msec ~8 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10     #229 [hci0] 93.271092
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 174645
+@ MGMT Event: User Confirmation R.. (0x000f) plen 12  {0x0001} [hci0] 93.271181
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Confirm hint: 0x01
+        Value: 0x0002aa35
+bluetoothd[334498]: @ MGMT Command.. (0x001c) plen 7  {0x0001} [hci0] 93.271608
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: User Confirmation... (0x01|0x002c) plen 6  #230 [hci0] 93.271673
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10              #231 [hci0] 93.273673
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+@ MGMT Event: Command Complete (0x0001) plen 10       {0x0001} [hci0] 93.273774
+      User Confirmation Reply (0x001c) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7        #232 [hci0] 93.285455
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23         #233 [hci0] 93.325128
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: 51f2c0302fd05bc0fc734d8a3ed019c1
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26           {0x0001} [hci0] 93.325227
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: 51f2c0302fd05bc0fc734d8a3ed019c1
+        PIN length: 0
+> HCI Event: Disconnect Complete (0x05) plen 4            #234 [hci0] 95.678900
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8     {0x0001} [hci0] 95.678990
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
+> HCI Event: Connect Request (0x04) plen 10              #235 [hci0] 108.165016
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection.. (0x01|0x0009) plen 7  #236 [hci0] 108.165157
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                #237 [hci0] 108.165746
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                   #238 [hci0] 108.326428
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11             #239 [hci0] 108.353793
+        Status: Success (0x00)
+        Handle: 11
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22  {0x0002} 108.354574
+btmon[334575]: @ RAW Close: btmon                           {0x0002} 108.354606
+< HCI Command: Read Remote Suppo.. (0x01|0x001b) plen 2  #240 [hci0] 108.354658
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Status (0x0f) plen 4                #241 [hci0] 108.355311
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22  {0x0002} 108.355453
+btmon[328892]: @ RAW Close: btmon                           {0x0002} 108.355565
+> HCI Event: Read Remote Supported Fea.. (0x0b) plen 11  #242 [hci0] 108.355579
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+< HCI Command: Read Remote Exten.. (0x01|0x001c) plen 3  #243 [hci0] 108.355639
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+> HCI Event: Command Status (0x0f) plen 4                #244 [hci0] 108.356479
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Feat.. (0x23) plen 13  #245 [hci0] 108.356656
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+> HCI Event: Max Slots Change (0x1b) plen 3              #246 [hci0] 108.356668
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+< HCI Command: Remote Name Requ.. (0x01|0x0019) plen 10  #247 [hci0] 108.356771
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 11 flags 0x00 dlen 10              #248 [hci0] 108.356843
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                #249 [hci0] 108.357760
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10              #250 [hci0] 108.364039
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 11 flags 0x00 dlen 16              #251 [hci0] 108.364144
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 11 flags 0x02 dlen 16              #252 [hci0] 108.367818
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 11 flags 0x00 dlen 10              #253 [hci0] 108.367895
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255    #254 [hci0] 108.373047
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35      {0x0001} [hci0] 108.373175
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: Number of Completed Packets (0x13) plen 5   #255 [hci0] 108.373139
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #248: len 10 (5 Kb/s)
+        Latency: 16 msec (16-16 msec ~16 msec)
+        #251: len 16 (16 Kb/s)
+        Latency: 8 msec (8-16 msec ~12 msec)
+> HCI Event: IO Capability Response (0x32) plen 9        #256 [hci0] 108.374883
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6         #257 [hci0] 108.374907
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 11 flags 0x02 dlen 10              #258 [hci0] 108.374912
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+< HCI Command: IO Capability Req.. (0x01|0x002b) plen 9  #259 [hci0] 108.375047
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+< ACL Data TX: Handle 11 flags 0x00 dlen 20              #260 [hci0] 108.375133
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+> HCI Event: Command Complete (0x0e) plen 10             #261 [hci0] 108.377942
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> ACL Data RX: Handle 11 flags 0x02 dlen 20              #262 [hci0] 108.377981
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+> HCI Event: Number of Completed Packets (0x13) plen 5   #263 [hci0] 108.402895
+        Num handles: 1
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #253: len 10 (2 Kb/s)
+        Latency: 35 msec (8-35 msec ~23 msec)
+        #260: len 20 (5 Kb/s)
+        Latency: 27 msec (8-35 msec ~25 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10    #264 [hci0] 108.628527
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 360356
+@ MGMT Event: User Confirmation... (0x000f) plen 12  {0x0001} [hci0] 108.628605
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Confirm hint: 0x01
+        Value: 0x00057fa4
+bluetoothd[334498]: @ MGMT Comman.. (0x001c) plen 7  {0x0001} [hci0] 108.630067
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: User Confirmation.. (0x01|0x002c) plen 6  #265 [hci0] 108.630170
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10             #266 [hci0] 108.630861
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+@ MGMT Event: Command Complete (0x0001) plen 10      {0x0001} [hci0] 108.630917
+      User Confirmation Reply (0x001c) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7       #267 [hci0] 108.642909
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23        #268 [hci0] 108.688849
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: 18b4ea09f2d584887bc4e885168483b2
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26          {0x0001} [hci0] 108.688934
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: 18b4ea09f2d584887bc4e885168483b2
+        PIN length: 0
+> HCI Event: Disconnect Complete (0x05) plen 4           #269 [hci0] 111.551385
+        Status: Success (0x00)
+        Handle: 11 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8    {0x0001} [hci0] 111.551475
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
+bluetoothd[334498]: @ MGMT Comman.. (0x0018) plen 1  {0x0001} [hci0] 122.033853
+        Capability: DisplayYesNo (0x01)
+@ MGMT Event: Command Complete (0x0001) plen 3       {0x0001} [hci0] 122.033906
+      Set IO Capability (0x0018) plen 0
+        Status: Success (0x00)
+bluetoothd[334498]: @ MGMT Command: Remove UUID      {0x0001} [hci0] 122.034048
+        UUID: Human Interface Device Service
+< HCI Command: Write Class of De.. (0x03|0x0024) plen 3  #270 [hci0] 122.034129
+        Class: 0x6c0000
+          Major class: Miscellaneous
+          Minor class: 0x00
+          Rendering (Printing, Speaker)
+          Capturing (Scanner, Microphone)
+          Audio (Speaker, Microphone, Headset)
+          Telephony (Cordless telephony, Modem, Headset)
+> HCI Event: Command Complete (0x0e) plen 4              #271 [hci0] 122.034593
+      Write Class of Device (0x03|0x0024) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Class Of Device Cha.. (0x0007) plen 3  {0x0001} [hci0] 122.034652
+        Class: 0x6c0000
+          Major class: Miscellaneous
+          Minor class: 0x00
+          Rendering (Printing, Speaker)
+          Capturing (Scanner, Microphone)
+          Audio (Speaker, Microphone, Headset)
+          Telephony (Cordless telephony, Modem, Headset)
+< HCI Command: Write Extended... (0x03|0x0052) plen 241  #272 [hci0] 122.034709
+        FEC: Not required (0x00)
+        Name (complete): Pro Controller
+        TX power: 0 dBm
+        Device ID: USB Implementer's Forum assigned (0x0002)
+          Vendor: Linux Foundation (0x1d6b)
+          Product: 0x0246
+          Version: 5.5.2 (0x0552)
+        16-bit Service UUIDs (complete): 10 entries
+          Generic Access Profile (0x1800)
+          Generic Attribute Profile (0x1801)
+          Device Information (0x180a)
+          A/V Remote Control (0x110e)
+          A/V Remote Control Target (0x110c)
+          SIM Access (0x112d)
+          Handsfree Audio Gateway (0x111f)
+          Handsfree (0x111e)
+          Audio Source (0x110a)
+          Audio Sink (0x110b)
+        128-bit Service UUIDs (complete): 1 entry
+          Vendor specific
+> HCI Event: Command Complete (0x0e) plen 4              #273 [hci0] 122.037809
+      Write Extended Inquiry Response (0x03|0x0052) ncmd 1
+        Status: Success (0x00)
+@ MGMT Event: Command Complete (0x0001) plen 6       {0x0001} [hci0] 122.038197
+      Remove UUID (0x0011) plen 3
+        Status: Success (0x00)
+        Class: 0x6c0000
+          Major class: Miscellaneous
+          Minor class: 0x00
+          Rendering (Printing, Speaker)
+          Capturing (Scanner, Microphone)
+          Audio (Speaker, Microphone, Headset)
+          Telephony (Cordless telephony, Modem, Headset)
+> HCI Event: Connect Request (0x04) plen 10              #274 [hci0] 123.532519
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+        Link type: ACL (0x01)
+< HCI Command: Accept Connection.. (0x01|0x0009) plen 7  #275 [hci0] 123.533134
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Command Status (0x0f) plen 4                #276 [hci0] 123.533728
+      Accept Connection Request (0x01|0x0009) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Role Change (0x12) plen 8                   #277 [hci0] 123.695125
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Role: Central (0x00)
+> HCI Event: Connect Complete (0x03) plen 11             #278 [hci0] 123.717814
+        Status: Success (0x00)
+        Handle: 12
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link type: ACL (0x01)
+        Encryption: Disabled (0x00)
+< HCI Command: Read Remote Suppo.. (0x01|0x001b) plen 2  #279 [hci0] 123.718082
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+btmon[328892]: @ RAW Open: btmon (privileged) version 2.22  {0x0002} 123.718360
+btmon[328892]: @ RAW Close: btmon                           {0x0002} 123.718379
+btmon[334575]: @ RAW Open: btmon (privileged) version 2.22  {0x0002} 123.718569
+btmon[334575]: @ RAW Close: btmon                           {0x0002} 123.718583
+> HCI Event: Command Status (0x0f) plen 4                #280 [hci0] 123.719113
+      Read Remote Supported Features (0x01|0x001b) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Supported Fea.. (0x0b) plen 11  #281 [hci0] 123.719278
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+          3 slot packets
+          5 slot packets
+          Encryption
+          Slot offset
+          Timing accuracy
+          Role switch
+          Sniff mode
+          Power control requests
+          Channel quality driven data rate (CQDDR)
+          SCO link
+          HV2 packets
+          HV3 packets
+          u-law log synchronous data
+          A-law log synchronous data
+          CVSD synchronous data
+          Paging parameter negotiation
+          Power control
+          Transparent synchronous data
+          Flow control lag (most significant bit)
+          Broadcast Encryption
+          Enhanced Data Rate ACL 2 Mbps mode
+          Enhanced Data Rate ACL 3 Mbps mode
+          Enhanced inquiry scan
+          Interlaced inquiry scan
+          Interlaced page scan
+          RSSI with inquiry results
+          Extended SCO link (EV3 packets)
+          EV4 packets
+          EV5 packets
+          AFH capable peripheral
+          AFH classification peripheral
+          LE Supported (Controller)
+          3-slot Enhanced Data Rate ACL packets
+          5-slot Enhanced Data Rate ACL packets
+          Sniff subrating
+          Pause encryption
+          AFH capable central
+          AFH classification central
+          Enhanced Data Rate eSCO 2 Mbps mode
+          Enhanced Data Rate eSCO 3 Mbps mode
+          3-slot Enhanced Data Rate eSCO packets
+          Extended Inquiry Response
+          Simultaneous LE and BR/EDR (Controller)
+          Secure Simple Pairing
+          Encapsulated PDU
+          Erroneous Data Reporting
+          Non-flushable Packet Boundary Flag
+          Link Supervision Timeout Changed Event
+          Inquiry TX Power Level
+          Enhanced Power Control
+          Extended features
+< HCI Command: Read Remote Exten.. (0x01|0x001c) plen 3  #282 [hci0] 123.719320
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1
+> HCI Event: Command Status (0x0f) plen 4                #283 [hci0] 123.719925
+      Read Remote Extended Features (0x01|0x001c) ncmd 1
+        Status: Success (0x00)
+> HCI Event: Read Remote Extended Feat.. (0x23) plen 13  #284 [hci0] 123.720488
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page: 1/2
+        Features: 0x0f 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+          Secure Simple Pairing (Host Support)
+          LE Supported (Host)
+          Simultaneous LE and BR/EDR (Host)
+          Secure Connections (Host Support)
+> HCI Event: Max Slots Change (0x1b) plen 3              #285 [hci0] 123.720499
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Max slots: 5
+< HCI Command: Remote Name Requ.. (0x01|0x0019) plen 10  #286 [hci0] 123.720589
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Page scan repetition mode: R2 (0x02)
+        Page scan mode: Mandatory (0x00)
+        Clock offset: 0x0000
+< ACL Data TX: Handle 12 flags 0x00 dlen 10              #287 [hci0] 123.720608
+      L2CAP: Information Request (0x0a) ident 1 len 2
+        Type: Extended features supported (0x0002)
+> HCI Event: Command Status (0x0f) plen 4                #288 [hci0] 123.721416
+      Remote Name Request (0x01|0x0019) ncmd 1
+        Status: Success (0x00)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10              #289 [hci0] 123.727731
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Extended features supported (0x0002)
+< ACL Data TX: Handle 12 flags 0x00 dlen 16              #290 [hci0] 123.727801
+      L2CAP: Information Response (0x0b) ident 2 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000002b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+          Unicast Connectionless Data Reception
+> ACL Data RX: Handle 12 flags 0x02 dlen 16              #291 [hci0] 123.731546
+      L2CAP: Information Response (0x0b) ident 1 len 8
+        Type: Extended features supported (0x0002)
+        Result: Success (0x0000)
+        Features: 0x000000b8
+          Enhanced Retransmission Mode
+          Streaming Mode
+          FCS Option
+          Fixed Channels
+< ACL Data TX: Handle 12 flags 0x00 dlen 10              #292 [hci0] 123.731644
+      L2CAP: Information Request (0x0a) ident 2 len 2
+        Type: Fixed channels supported (0x0003)
+> HCI Event: Remote Name Req Complete (0x07) plen 255    #293 [hci0] 123.738497
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Name: Nintendo Switch
+@ MGMT Event: Device Connected (0x000b) plen 35      {0x0001} [hci0] 123.738582
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Flags: 0x00000000
+        Data length: 22
+        Name (complete): Nintendo Switch
+        Class: 0x08043c
+          Major class: Audio/Video (headset, speaker, stereo, video, vcr)
+          Minor class: Video Display and Loudspeaker
+          Capturing (Scanner, Microphone)
+> HCI Event: IO Capability Response (0x32) plen 9        #294 [hci0] 123.738511
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: NoInputNoOutput (0x03)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+> HCI Event: IO Capability Request (0x31) plen 6         #295 [hci0] 123.738512
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Number of Completed Packets (0x13) plen 5   #296 [hci0] 123.738513
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #287: len 10 (4 Kb/s)
+        Latency: 17 msec (17-17 msec ~17 msec)
+        #290: len 16 (12 Kb/s)
+        Latency: 10 msec (10-17 msec ~14 msec)
+> ACL Data RX: Handle 12 flags 0x02 dlen 10              #297 [hci0] 123.738515
+      L2CAP: Information Request (0x0a) ident 3 len 2
+        Type: Fixed channels supported (0x0003)
+> ACL Data RX: Handle 12 flags 0x02 dlen 20              #298 [hci0] 123.738516
+      L2CAP: Information Response (0x0b) ident 2 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000002
+          L2CAP Signaling (BR/EDR)
+< HCI Command: IO Capability Req.. (0x01|0x002b) plen 9  #299 [hci0] 123.738661
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        IO capability: DisplayYesNo (0x01)
+        OOB data: Authentication data not present (0x00)
+        Authentication: Dedicated Bonding - MITM not required (0x02)
+< ACL Data TX: Handle 12 flags 0x00 dlen 20              #300 [hci0] 123.738730
+      L2CAP: Information Response (0x0b) ident 3 len 12
+        Type: Fixed channels supported (0x0003)
+        Result: Success (0x0000)
+        Channels: 0x0000000000000086
+          L2CAP Signaling (BR/EDR)
+          Connectionless reception
+          Security Manager (BR/EDR)
+> HCI Event: Command Complete (0x0e) plen 10             #301 [hci0] 123.739591
+      IO Capability Request Reply (0x01|0x002b) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Number of Completed Packets (0x13) plen 5   #302 [hci0] 123.743309
+        Num handles: 1
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Count: 2
+        #292: len 10 (7 Kb/s)
+        Latency: 11 msec (10-17 msec ~12 msec)
+        #300: len 20 (40 Kb/s)
+        Latency: 4 msec (4-17 msec ~8 msec)
+> HCI Event: User Confirmation Request (0x33) plen 10    #303 [hci0] 123.995992
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Passkey: 489772
+@ MGMT Event: User Confirmation... (0x000f) plen 12  {0x0001} [hci0] 123.996060
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Confirm hint: 0x01
+        Value: 0x0007792c
+bluetoothd[334498]: @ MGMT Comman.. (0x001c) plen 7  {0x0001} [hci0] 123.997028
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+< HCI Command: User Confirmation.. (0x01|0x002c) plen 6  #304 [hci0] 123.997097
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Command Complete (0x0e) plen 10             #305 [hci0] 123.997826
+      User Confirmation Request Reply (0x01|0x002c) ncmd 1
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+@ MGMT Event: Command Complete (0x0001) plen 10      {0x0001} [hci0] 123.997887
+      User Confirmation Reply (0x001c) plen 7
+        Status: Success (0x00)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Simple Pairing Complete (0x36) plen 7       #306 [hci0] 124.010384
+        Status: Success (0x00)
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+> HCI Event: Link Key Notification (0x18) plen 23        #307 [hci0] 124.052543
+        Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Link key[16]: 1ec4c33a046f2b2b4cf130e192375878
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+@ MGMT Event: New Link Key (0x0009) plen 26          {0x0001} [hci0] 124.052605
+        Store hint: Yes (0x01)
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Key type: Unauthenticated Combination key from P-256 (0x07)
+        Link key[16]: 1ec4c33a046f2b2b4cf130e192375878
+        PIN length: 0
+> HCI Event: Disconnect Complete (0x05) plen 4           #308 [hci0] 126.398804
+        Status: Success (0x00)
+        Handle: 12 Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8    {0x0001} [hci0] 126.398874
+        BR/EDR Address: 64:B5:C6:80:01:33 (Nintendo Co.,Ltd)
+        Reason: Connection terminated by remote host (0x03)
