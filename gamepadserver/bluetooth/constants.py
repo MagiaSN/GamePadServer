@@ -19,6 +19,10 @@ PSM_INTERRUPT = 19
 
 # Switch connection timeouts
 SWITCH_CONNECTION_TIMEOUT_SECONDS = 30.0
+# Per-PSM outbound connect() deadline on the reconnect path.  The kernel
+# does ACL-create + authentication + encryption before returning, so this
+# must cover the full BR/EDR page timeout on an asleep Switch.
+SWITCH_RECONNECT_TIMEOUT_SECONDS = 15.0
 
 # ---------------------------------------------------------------------------
 # HID report constants

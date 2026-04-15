@@ -4,8 +4,8 @@ This module wraps a pair of already-connected L2CAP sockets (control +
 interrupt channels) and provides send/recv helpers for the protocol layer.
 
 The sockets are obtained either from:
-  a) SDPService.wait_for_connection() (D-Bus Profile1 NewConnection)
-  b) Direct socket bind/listen/accept (standalone mode)
+  a) SDPService.wait_for_connection() — first-pair path (Switch dials in)
+  b) connect_outbound() — reconnect path (we dial into the Switch)
 """
 
 from __future__ import annotations
@@ -15,7 +15,18 @@ import logging
 import os
 import socket
 
+from .constants import (
+    PSM_CONTROL,
+    PSM_INTERRUPT,
+    SWITCH_RECONNECT_TIMEOUT_SECONDS,
+)
+
 log = logging.getLogger(__name__)
+
+# AF_BLUETOOTH / BTPROTO_L2CAP aren't in Python's socket module on all
+# platforms; mirror the constants from sdp.py so both paths share them.
+AF_BLUETOOTH = 31
+BTPROTO_L2CAP = 0
 
 
 class L2CAPConnection:
@@ -64,3 +75,45 @@ class L2CAPConnection:
             except OSError:
                 pass
         log.info("L2CAP sockets closed")
+
+
+def connect_outbound(
+    switch_address: str,
+    timeout: float = SWITCH_RECONNECT_TIMEOUT_SECONDS,
+) -> tuple[socket.socket, socket.socket]:
+    """Dial out to a paired Switch on PSM 17 + 19 (reconnect path).
+
+    Matches the approach in nxbt ``controller/server.py::reconnect``:
+    the kernel auto-negotiates authentication/encryption against the
+    stored link key, so no extra HCI commands are required here.
+
+    Returns ``(ctrl, itr)``.  Raises ``OSError`` if either channel fails
+    to connect — caller is responsible for cleanup and for falling back
+    to the listen-based first-pair path.
+    """
+    log.info("Dialing Switch %s on PSM %d + %d (timeout=%.1fs each)",
+             switch_address, PSM_CONTROL, PSM_INTERRUPT, timeout)
+
+    ctrl = socket.socket(AF_BLUETOOTH, socket.SOCK_SEQPACKET, BTPROTO_L2CAP)
+    itr = socket.socket(AF_BLUETOOTH, socket.SOCK_SEQPACKET, BTPROTO_L2CAP)
+    try:
+        ctrl.settimeout(timeout)
+        ctrl.connect((switch_address, PSM_CONTROL))
+        log.info("Control channel (PSM %d) connected", PSM_CONTROL)
+
+        itr.settimeout(timeout)
+        itr.connect((switch_address, PSM_INTERRUPT))
+        log.info("Interrupt channel (PSM %d) connected", PSM_INTERRUPT)
+
+        # Blocking for post-connect I/O; L2CAPConnection will flip the
+        # interrupt socket to non-blocking itself.
+        ctrl.settimeout(None)
+        itr.settimeout(None)
+        return ctrl, itr
+    except OSError:
+        for s in (itr, ctrl):
+            try:
+                s.close()
+            except OSError:
+                pass
+        raise

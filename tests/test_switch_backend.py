@@ -163,6 +163,70 @@ class TestSwitchBackendSendInput:
         assert "B" in backend._report.buttons
 
 
+class TestSwitchBackendConnectPath:
+    """_open_l2cap branches on bond state; mock both paths and verify."""
+
+    def _prepped(self) -> SwitchBackend:
+        backend = SwitchBackend()
+        backend._sdp = MagicMock()
+        return backend
+
+    def test_no_paired_uses_listen_path(self):
+        backend = self._prepped()
+        ctrl, itr = MagicMock(), MagicMock()
+        itr.getpeername.return_value = ("AA:BB:CC:DD:EE:FF", 19)
+        backend._sdp.wait_for_connection.return_value = (ctrl, itr)
+
+        with patch(
+            "gamepadserver.backends.switch.list_paired_switches",
+            return_value=[],
+        ), patch(
+            "gamepadserver.backends.switch.connect_outbound"
+        ) as outbound:
+            c, i, addr = backend._open_l2cap("00:11:22:33:44:55")
+
+        assert (c, i) == (ctrl, itr)
+        assert addr == "AA:BB:CC:DD:EE:FF"
+        outbound.assert_not_called()
+        backend._sdp.wait_for_connection.assert_called_once()
+
+    def test_paired_uses_reconnect_path(self):
+        backend = self._prepped()
+        ctrl, itr = MagicMock(), MagicMock()
+
+        with patch(
+            "gamepadserver.backends.switch.list_paired_switches",
+            return_value=["AA:BB:CC:DD:EE:FF"],
+        ), patch(
+            "gamepadserver.backends.switch.connect_outbound",
+            return_value=(ctrl, itr),
+        ) as outbound:
+            c, i, addr = backend._open_l2cap("00:11:22:33:44:55")
+
+        assert (c, i, addr) == (ctrl, itr, "AA:BB:CC:DD:EE:FF")
+        outbound.assert_called_once_with("AA:BB:CC:DD:EE:FF")
+        backend._sdp.wait_for_connection.assert_not_called()
+
+    def test_reconnect_failure_falls_back_to_listen(self):
+        backend = self._prepped()
+        ctrl, itr = MagicMock(), MagicMock()
+        itr.getpeername.return_value = ("AA:BB:CC:DD:EE:FF", 19)
+        backend._sdp.wait_for_connection.return_value = (ctrl, itr)
+
+        with patch(
+            "gamepadserver.backends.switch.list_paired_switches",
+            return_value=["AA:BB:CC:DD:EE:FF"],
+        ), patch(
+            "gamepadserver.backends.switch.connect_outbound",
+            side_effect=OSError("ECONNREFUSED"),
+        ) as outbound:
+            c, i, addr = backend._open_l2cap("00:11:22:33:44:55")
+
+        assert (c, i) == (ctrl, itr)
+        outbound.assert_called_once()
+        backend._sdp.wait_for_connection.assert_called_once()
+
+
 class TestSwitchBackendDisconnect:
 
     @pytest.mark.asyncio

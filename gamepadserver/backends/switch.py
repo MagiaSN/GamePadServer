@@ -14,7 +14,8 @@ from gamepadserver.bluetooth.constants import (
     DEVICE_CLASS,
     SWITCH_CONNECTION_TIMEOUT_SECONDS,
 )
-from gamepadserver.bluetooth.l2cap import L2CAPConnection
+from gamepadserver.bluetooth.l2cap import L2CAPConnection, connect_outbound
+from gamepadserver.bluetooth.paired import list_paired_switches
 from gamepadserver.bluetooth.sdp import SDPService
 from gamepadserver.bluetooth.switch_protocol import SwitchProtocol
 from gamepadserver.bluetooth.switch_report import ReportBuilder, stick_from_api
@@ -150,14 +151,14 @@ class SwitchBackend(GamepadBackend):
             subprocess.run(cmd, capture_output=True, timeout=5, check=False)
         logger.info("Device class re-applied")
 
-        # 5. Wait for Switch to connect via raw L2CAP sockets
-        logger.info("Waiting for Switch connection…")
-        ctrl_sock, itr_sock = self._sdp.wait_for_connection(
-            adapter_address=bd_addr,
-            timeout=SWITCH_CONNECTION_TIMEOUT_SECONDS,
-        )
-        self._conn = L2CAPConnection(ctrl_sock, itr_sock)
-        logger.info("Switch connected")
+        # 5. Establish L2CAP channels.  If Pi already has a bond record
+        #    for a Switch, the Switch will only do "dedicated bonding"
+        #    on inbound connects and never open PSM 17/19 — so we must
+        #    dial out instead (reconnect path).  See TASK_RECONNECT.md.
+        ctrl_sock, itr_sock, switch_addr = self._open_l2cap(bd_addr)
+        self._conn = L2CAPConnection(ctrl_sock, itr_sock,
+                                     client_address=switch_addr)
+        logger.info("Switch connected (%s)", switch_addr or "unknown")
 
         # 6. Handshake
         self._protocol = SwitchProtocol(self._conn, bd_addr)
@@ -176,6 +177,41 @@ class SwitchBackend(GamepadBackend):
         self._press_sync(["L", "R"], 0.5)
         logger.info("Switch controller ready (player=%s)",
                      self._protocol.player_number)
+
+    def _open_l2cap(self, bd_addr: str):
+        """Return (ctrl_sock, itr_sock, switch_address) via the most
+        appropriate path for the current bond state.
+
+        Prefers the outbound reconnect path when any Switch is paired
+        with this adapter; falls back to the listen (first-pair) path
+        on reconnect failure or if no bond is known.
+        """
+        import socket as _socket
+
+        paired = list_paired_switches()
+        for mac in paired:
+            logger.info("Trying reconnect path to paired Switch %s", mac)
+            try:
+                ctrl, itr = connect_outbound(mac)
+                return ctrl, itr, mac
+            except (OSError, _socket.timeout) as exc:
+                logger.warning(
+                    "Reconnect to %s failed (%s) — falling back to listen path. "
+                    "This run will be slow; if it still fails, clear the Switch-"
+                    "side bond (Controllers → disconnect) and try again.",
+                    mac, exc,
+                )
+
+        logger.info("Listening for Switch on L2CAP PSM 17+19 (first-pair path)")
+        ctrl, itr = self._sdp.wait_for_connection(
+            adapter_address=bd_addr,
+            timeout=SWITCH_CONNECTION_TIMEOUT_SECONDS,
+        )
+        try:
+            peer = itr.getpeername()[0]
+        except OSError:
+            peer = ""
+        return ctrl, itr, peer
 
     def _disconnect_sync(self) -> None:
         # Stop keep-alive
