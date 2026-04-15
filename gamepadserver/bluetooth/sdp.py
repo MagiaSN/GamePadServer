@@ -20,7 +20,11 @@ import logging
 import socket
 from typing import Any
 
-from .constants import PSM_CONTROL, PSM_INTERRUPT
+from .constants import (
+    PSM_CONTROL,
+    PSM_INTERRUPT,
+    SWITCH_CONNECTION_TIMEOUT_SECONDS,
+)
 
 log = logging.getLogger(__name__)
 
@@ -142,7 +146,7 @@ class SDPService:
     def wait_for_connection(
         self,
         adapter_address: str = "",
-        timeout: float = 120.0,
+        timeout: float = SWITCH_CONNECTION_TIMEOUT_SECONDS,
     ) -> tuple[socket.socket, socket.socket]:
         """Listen on PSM 17+19 and accept the Switch's connection.
 

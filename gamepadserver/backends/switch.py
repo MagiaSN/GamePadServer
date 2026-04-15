@@ -10,7 +10,10 @@ import time
 
 from gamepadserver.bluetooth.adapter import BluetoothAdapter
 from gamepadserver.bluetooth.agent import BlueZAgent
-from gamepadserver.bluetooth.constants import DEVICE_CLASS
+from gamepadserver.bluetooth.constants import (
+    DEVICE_CLASS,
+    SWITCH_CONNECTION_TIMEOUT_SECONDS,
+)
 from gamepadserver.bluetooth.l2cap import L2CAPConnection
 from gamepadserver.bluetooth.sdp import SDPService
 from gamepadserver.bluetooth.switch_protocol import SwitchProtocol
@@ -150,14 +153,15 @@ class SwitchBackend(GamepadBackend):
         # 5. Wait for Switch to connect via raw L2CAP sockets
         logger.info("Waiting for Switch connection…")
         ctrl_sock, itr_sock = self._sdp.wait_for_connection(
-            adapter_address=bd_addr, timeout=120,
+            adapter_address=bd_addr,
+            timeout=SWITCH_CONNECTION_TIMEOUT_SECONDS,
         )
         self._conn = L2CAPConnection(ctrl_sock, itr_sock)
         logger.info("Switch connected")
 
         # 6. Handshake
         self._protocol = SwitchProtocol(self._conn, bd_addr)
-        self._protocol.handshake(timeout=60)
+        self._protocol.handshake(timeout=SWITCH_CONNECTION_TIMEOUT_SECONDS)
         # Adopt the protocol's report builder so we keep the timer in sync
         self._report = self._protocol.report
 

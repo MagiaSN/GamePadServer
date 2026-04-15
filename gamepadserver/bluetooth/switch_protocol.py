@@ -29,6 +29,7 @@ from .constants import (
     SUBCMD_SET_SHIPMENT,
     SUBCMD_SPI_READ,
     SUBCMD_TRIGGER_BUTTONS,
+    SWITCH_CONNECTION_TIMEOUT_SECONDS,
     spi_read,
 )
 from .l2cap import L2CAPConnection
@@ -59,7 +60,7 @@ class SwitchProtocol:
     # Handshake
     # ------------------------------------------------------------------
 
-    def handshake(self, timeout: float = 60.0) -> None:
+    def handshake(self, timeout: float = SWITCH_CONNECTION_TIMEOUT_SECONDS) -> None:
         """Run the pairing handshake loop until the Switch assigns a player.
 
         During the initial validation phase the Switch expects reports at

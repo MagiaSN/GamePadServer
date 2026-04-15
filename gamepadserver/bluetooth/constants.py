@@ -17,6 +17,9 @@ DEVICE_NAME = "Pro Controller"
 PSM_CONTROL = 17
 PSM_INTERRUPT = 19
 
+# Switch connection timeouts
+SWITCH_CONNECTION_TIMEOUT_SECONDS = 30.0
+
 # ---------------------------------------------------------------------------
 # HID report constants
 # ---------------------------------------------------------------------------
