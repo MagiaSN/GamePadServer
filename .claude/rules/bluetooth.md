@@ -1,7 +1,6 @@
 ---
 paths:
   - "gamepadserver/bluetooth/**"
-  - "test_bt_connect.py"
 ---
 
 # Bluetooth HID development rules
