@@ -47,7 +47,7 @@ def client():
 
     # Replace the global manager with one that uses MockBackend
     manager = ControllerManager()
-    manager._create_backend = lambda platform: MockBackend()
+    manager._create_backend = lambda platform, transport: MockBackend()
     app_module.controller_manager = manager
 
     return TestClient(app_module.app)
@@ -75,8 +75,26 @@ class TestControllerLifecycle:
         assert res.status_code == 201
         data = res.json()
         assert data["platform"] == "switch"
+        assert data["transport"] == "bluetooth"  # default
         assert "id" in data
         assert "created_at" in data
+
+    def test_create_controller_usb_transport(self, client):
+        res = client.post(
+            "/api/v1/controllers",
+            json={"platform": "switch", "transport": "usb"},
+        )
+        assert res.status_code == 201
+        data = res.json()
+        assert data["platform"] == "switch"
+        assert data["transport"] == "usb"
+
+    def test_create_controller_invalid_transport(self, client):
+        res = client.post(
+            "/api/v1/controllers",
+            json={"platform": "switch", "transport": "telepathy"},
+        )
+        assert res.status_code == 422
 
     def test_list_controllers(self, client):
         client.post("/api/v1/controllers", json={"platform": "switch"})

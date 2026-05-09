@@ -8,7 +8,8 @@ GamePadServer is a Python REST/WebSocket service that emulates game controllers 
 
 - **Framework:** FastAPI (async) + uvicorn
 - **API:** REST for lifecycle + single actions, WebSocket for real-time input streams
-- **Platforms:** Switch (Bluetooth, implemented), PS4/PS5/Xbox (USB Gadget, planned)
+- **Platforms:** Switch over Bluetooth and USB (both implemented), PS4/PS5/Xbox (USB Gadget, planned)
+- **Transport selection:** controller create requests carry an optional `transport` field (`bluetooth` | `usb`, default `bluetooth`); the same `GamepadBackend` interface backs both.
 
 ## Key Architecture Decisions
 
@@ -51,8 +52,14 @@ gamepadserver/
 │   ├── switch_protocol.py   # Switch HID handshake state machine
 │   ├── switch_report.py     # 50-byte input report encode/decode
 │   └── constants.py         # Protocol constants, button maps, SPI templates
+├── usb/                     # USB Gadget HID stack (mirror of bluetooth/)
+│   ├── gadget.py            # ConfigFS gadget setup + UDC bind/unbind
+│   ├── hid_device.py        # /dev/hidg0 read/write wrapper (L2CAPConnection-shaped)
+│   ├── switch_protocol.py   # Switch USB-only 0x80 handshake; reuses BT subcommand handlers
+│   └── constants.py         # VID/PID, HID report descriptor, USB cmd codes
 ├── backends/
-│   └── switch.py            # SwitchBackend (uses bluetooth/ module)
+│   ├── switch.py            # SwitchBackend (Bluetooth, uses bluetooth/)
+│   └── switch_usb.py        # SwitchUSBBackend (USB, uses usb/)
 └── static/
     └── index.html           # Interactive test page
 ```
@@ -95,6 +102,14 @@ sudo .venv/bin/python tests/switch_e2e.py
 
 `tests/switch_e2e.py` is the canonical end-to-end probe — it drives `SwitchBackend` exactly like the production server, connects to the Switch, presses HOME, then disconnects. Use this script (not ad-hoc scripts) whenever you need to verify a real-hardware Switch flow end to end. The filename drops the `test_` prefix so pytest does not collect it.
 
+USB end-to-end (requires Pi gadget mode + cable to Switch dock, must run as root):
+
+```bash
+sudo .venv/bin/python tests/switch_usb_e2e.py
+```
+
+`tests/switch_usb_e2e.py` is the USB equivalent — it exercises `SwitchUSBBackend` end to end: ConfigFS setup, UDC bind, handshake, HOME press, UDC unbind. The Switch should be on a screen that accepts USB controllers (Home menu / any game; "Change Grip/Order" is *not* needed for USB).
+
 ### Code Style
 
 - Async throughout — blocking BT/USB calls go through `asyncio.run_in_executor()`
@@ -133,7 +148,31 @@ Other reference files:
     (e.g. `switch_connect_success.btsnoop`). Diff a failing run against
     the matching capture to localize regressions.
 
-### Connection Paths (Switch)
+### Connection Paths (Switch USB)
+
+`SwitchUSBBackend` uses **soft connect/disconnect** via UDC bind/unbind
+rather than physical cable plug events. The flow:
+
+- **connect()** — `USBGadget.setup()` ensures the ConfigFS tree exists
+  (idempotent), `bind()` writes the UDC name to activate D+ pullup, then
+  the backend opens `/dev/hidg0` and runs the USB-then-subcommand
+  handshake. The Switch dock sees a USB attach event.
+- **disconnect()** — keep-alive thread stopped, `/dev/hidg0` closed,
+  UDC released. The Switch dock sees a USB detach event. The ConfigFS
+  state is preserved so the next connect() is a fast rebind.
+
+This means **the USB cable can stay plugged in indefinitely** — the
+attach/detach events are entirely driven by the API. Only one USB gadget
+can bind to a UDC at a time, so each Pi supports a single
+SwitchUSBBackend instance.
+
+USB hardware constraints:
+- Pi 4: USB-C port supports peripheral mode via `dwc2` overlay; the port
+  also carries power, so power must come from GPIO/PoE when used.
+- Pi Zero 2W: micro-USB data port supports peripheral mode natively.
+- Pi 5: USB-C port is power-only — **USB backend not supported on Pi 5**.
+
+### Connection Paths (Switch Bluetooth)
 
 `SwitchBackend._open_l2cap` picks between two paths based on BlueZ bond state:
 

@@ -69,6 +69,10 @@ button.disconnect:hover { background: #e94560; }
     <option value="ps5">PlayStation 5</option>
     <option value="xbox">Xbox</option>
   </select>
+  <select id="transport">
+    <option value="bluetooth" selected>Bluetooth</option>
+    <option value="usb">USB</option>
+  </select>
   <button class="connect" id="btn-connect" onclick="connectController()">Connect</button>
   <button class="disconnect" id="btn-disconnect" onclick="disconnectController()" disabled>Disconnect</button>
   <span class="status disconnected" id="status-badge">Disconnected</span>
@@ -175,6 +179,7 @@ const FACE_LABELS = {
 // Platform switching
 // ---------------------------------------------------------------------------
 function getPlatform() { return document.getElementById('platform').value; }
+function getTransport() { return document.getElementById('transport').value; }
 
 function updateFaceButtons() {
   const p = getPlatform();
@@ -190,16 +195,21 @@ document.getElementById('platform').addEventListener('change', () => {
   if (controllerId !== null) disconnectController();
 });
 
+document.getElementById('transport').addEventListener('change', () => {
+  if (controllerId !== null) disconnectController();
+});
+
 // ---------------------------------------------------------------------------
 // Connection management
 // ---------------------------------------------------------------------------
 async function connectController() {
   const platform = getPlatform();
+  const transport = getTransport();
   try {
     const res = await fetch(`${API}/controllers`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ platform }),
+      body: JSON.stringify({ platform, transport }),
     });
     if (!res.ok) { alert('Failed to create controller'); return; }
     const data = await res.json();

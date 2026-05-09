@@ -183,9 +183,72 @@ fi
 
 echo
 
-# ── 5. Verify ───────────────────────────────────────────────────────
+# ── 5. USB gadget prerequisites (optional, for SwitchUSBBackend) ─────
 
-echo "5. Verifying configuration..."
+echo "5. Configuring USB gadget prerequisites (optional)..."
+
+USB_OK=1
+
+# 5a. Boot config: dwc2 device-tree overlay (Raspberry Pi only).
+#     Without this the Pi cannot expose a USB device controller.
+BOOT_CONFIG=""
+for candidate in /boot/firmware/config.txt /boot/config.txt; do
+    if [[ -f "$candidate" ]]; then
+        BOOT_CONFIG="$candidate"
+        break
+    fi
+done
+
+if [[ -n "$BOOT_CONFIG" ]]; then
+    if grep -qE '^\s*dtoverlay=dwc2(,|$)' "$BOOT_CONFIG"; then
+        ok "dwc2 overlay already configured in $BOOT_CONFIG"
+    else
+        echo "" >> "$BOOT_CONFIG"
+        echo "# Added by GamePadServer setup-host.sh — enable USB device mode" >> "$BOOT_CONFIG"
+        echo "dtoverlay=dwc2,dr_mode=peripheral" >> "$BOOT_CONFIG"
+        ok "Added dtoverlay=dwc2,dr_mode=peripheral to $BOOT_CONFIG (reboot required)"
+        CHANGES_MADE=1
+    fi
+else
+    warn "No /boot/firmware/config.txt or /boot/config.txt — skipping dwc2 overlay (non-Pi host?)"
+    USB_OK=0
+fi
+
+# 5b. /etc/modules: dwc2 + libcomposite must load at boot.
+MODULES_FILE="/etc/modules"
+if [[ -f "$MODULES_FILE" ]]; then
+    for mod in dwc2 libcomposite; do
+        if grep -qE "^\s*${mod}\s*$" "$MODULES_FILE"; then
+            ok "$mod already in $MODULES_FILE"
+        else
+            echo "$mod" >> "$MODULES_FILE"
+            ok "Added $mod to $MODULES_FILE"
+            CHANGES_MADE=1
+        fi
+    done
+else
+    warn "$MODULES_FILE not found — load dwc2 and libcomposite manually for USB mode"
+    USB_OK=0
+fi
+
+# 5c. Try modprobe libcomposite for the current session — non-fatal.
+if modprobe libcomposite 2>/dev/null; then
+    ok "libcomposite module loaded"
+else
+    warn "Could not load libcomposite (will be loaded after reboot if dwc2 enabled)"
+fi
+
+if [[ $USB_OK -eq 1 ]]; then
+    info "USB gadget mode enabled.  Reboot if dwc2 was newly added."
+else
+    info "USB backend prerequisites not configured (Bluetooth backend still works)."
+fi
+
+echo
+
+# ── 6. Verify ───────────────────────────────────────────────────────
+
+echo "6. Verifying configuration..."
 
 ERRORS=0
 

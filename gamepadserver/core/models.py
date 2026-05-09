@@ -19,6 +19,11 @@ class Platform(str, Enum):
     XBOX = "xbox"
 
 
+class Transport(str, Enum):
+    BLUETOOTH = "bluetooth"
+    USB = "usb"
+
+
 class ControllerState(str, Enum):
     CONNECTING = "connecting"
     CONNECTED = "connected"
@@ -105,6 +110,7 @@ class ControllerInfo:
     """Internal bookkeeping for a controller instance."""
     id: int
     platform: Platform
+    transport: Transport = Transport.BLUETOOTH
     state: ControllerState = ControllerState.CONNECTING
     created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     error: Optional[str] = None
@@ -116,11 +122,13 @@ class ControllerInfo:
 
 class CreateControllerRequest(BaseModel):
     platform: Platform
+    transport: Transport = Transport.BLUETOOTH
 
 
 class ControllerResponse(BaseModel):
     id: int
     platform: Platform
+    transport: Transport
     state: ControllerState
     created_at: datetime
     error: Optional[str] = None

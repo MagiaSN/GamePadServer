@@ -4,7 +4,7 @@ import pytest_asyncio
 from unittest.mock import AsyncMock, patch, MagicMock
 
 from gamepadserver.core.manager import ControllerManager
-from gamepadserver.core.models import ControllerState, Platform
+from gamepadserver.core.models import ControllerState, Platform, Transport
 
 
 class MockBackend:
@@ -40,7 +40,7 @@ class MockBackend:
 def manager():
     m = ControllerManager()
     # Patch _create_backend to return MockBackend
-    m._create_backend = lambda platform: MockBackend()
+    m._create_backend = lambda platform, transport: MockBackend()
     return m
 
 
@@ -101,3 +101,24 @@ async def test_unsupported_platform():
     manager = ControllerManager()
     with pytest.raises(ValueError, match="not yet supported"):
         await manager.create_controller(Platform.PS4)
+
+
+@pytest.mark.asyncio
+async def test_switch_usb_transport_uses_usb_backend(manager):
+    """A switch+usb create request should use the USB backend factory branch."""
+    seen: list[Transport] = []
+
+    def fake_factory(platform, transport):
+        seen.append(transport)
+        return MockBackend()
+
+    manager._create_backend = fake_factory
+    info = await manager.create_controller(Platform.SWITCH, Transport.USB)
+    assert info.transport == Transport.USB
+    assert seen == [Transport.USB]
+
+
+@pytest.mark.asyncio
+async def test_default_transport_is_bluetooth(manager):
+    info = await manager.create_controller(Platform.SWITCH)
+    assert info.transport == Transport.BLUETOOTH

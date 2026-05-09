@@ -11,6 +11,7 @@ GamePadServer is a game controller emulation service that runs on a Linux server
 | Console | Connection | Emulated Controller | Status |
 |---------|-----------|-------------------|--------|
 | Nintendo Switch | Bluetooth | Pro Controller | Implemented |
+| Nintendo Switch | USB (Gadget) | Pro Controller | Implemented |
 | PlayStation 4 | USB | DualShock 4 | Planned |
 | PlayStation 5 | USB | DualSense | Planned |
 | Xbox One / Series | USB | Xbox Controller | Planned |
@@ -71,7 +72,7 @@ Full API docs are available at `http://<host>:8080/docs` (Swagger UI) after star
 
 ### 1. Create and Connect a Controller
 
-For Switch, first enter "Change Grip/Order" (Settings > Controllers > Change Grip/Order), then call:
+For Switch over **Bluetooth**, first enter "Change Grip/Order" (Settings > Controllers > Change Grip/Order), then call:
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/controllers \
@@ -79,11 +80,21 @@ curl -X POST http://localhost:8080/api/v1/controllers \
   -d '{"platform": "switch"}'
 ```
 
+For Switch over **USB**, plug a USB cable from the Pi's gadget port into the Switch dock, then:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/controllers \
+  -H "Content-Type: application/json" \
+  -d '{"platform": "switch", "transport": "usb"}'
+```
+
 Response:
 
 ```json
-{"id": 0, "platform": "switch", "state": "connecting", "created_at": "..."}
+{"id": 0, "platform": "switch", "transport": "bluetooth", "state": "connecting", "created_at": "..."}
 ```
+
+The `transport` field is optional and defaults to `"bluetooth"`. With USB, the cable can stay plugged in continuously — `connect` / `DELETE` operations soft-attach and soft-detach via UDC bind/unbind, which the Switch dock sees as plug/unplug events.
 
 ### 2. Check Connection Status
 
@@ -205,8 +216,14 @@ gamepadserver/
 │   ├── switch_protocol.py   # Switch HID handshake state machine
 │   ├── switch_report.py     # 50-byte input report encode/decode
 │   └── constants.py         # Protocol constants, button maps, SPI templates
+├── usb/                     # USB Gadget HID stack
+│   ├── gadget.py            # ConfigFS gadget setup + UDC bind/unbind
+│   ├── hid_device.py        # /dev/hidg0 read/write wrapper
+│   ├── switch_protocol.py   # USB-only 0x80 handshake (extends BT protocol)
+│   └── constants.py         # VID/PID, HID report descriptor, USB cmd codes
 ├── backends/
-│   └── switch.py            # SwitchBackend (uses bluetooth/ module)
+│   ├── switch.py            # SwitchBackend (Bluetooth)
+│   └── switch_usb.py        # SwitchUSBBackend (USB Gadget)
 └── static/
     └── index.html           # Interactive test page
 ```

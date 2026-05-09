@@ -24,6 +24,7 @@ def _info_to_response(info) -> ControllerResponse:
     return ControllerResponse(
         id=info.id,
         platform=info.platform,
+        transport=info.transport,
         state=info.state,
         created_at=info.created_at,
         error=info.error,
@@ -36,7 +37,7 @@ def _info_to_response(info) -> ControllerResponse:
 async def create_controller(req: CreateControllerRequest):
     manager = _get_manager()
     try:
-        info = await manager.create_controller(req.platform)
+        info = await manager.create_controller(req.platform, req.transport)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
     return _info_to_response(info)

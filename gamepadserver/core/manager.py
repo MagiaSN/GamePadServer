@@ -11,6 +11,7 @@ from gamepadserver.core.models import (
     ControllerState,
     InputState,
     Platform,
+    Transport,
 )
 
 logger = logging.getLogger(__name__)
@@ -28,18 +29,32 @@ class ControllerManager:
         self._next_id += 1
         return cid
 
-    def _create_backend(self, platform: Platform) -> GamepadBackend:
+    def _create_backend(
+        self, platform: Platform, transport: Transport,
+    ) -> GamepadBackend:
         if platform == Platform.SWITCH:
-            from gamepadserver.backends.switch import SwitchBackend
-            return SwitchBackend()
-        raise ValueError(f"Platform '{platform.value}' is not yet supported.")
+            if transport == Transport.BLUETOOTH:
+                from gamepadserver.backends.switch import SwitchBackend
+                return SwitchBackend()
+            if transport == Transport.USB:
+                from gamepadserver.backends.switch_usb import SwitchUSBBackend
+                return SwitchUSBBackend()
+        raise ValueError(
+            f"Platform '{platform.value}' over '{transport.value}' "
+            "is not yet supported."
+        )
 
-    async def create_controller(self, platform: Platform) -> ControllerInfo:
+    async def create_controller(
+        self,
+        platform: Platform,
+        transport: Transport = Transport.BLUETOOTH,
+    ) -> ControllerInfo:
         cid = self._allocate_id()
-        backend = self._create_backend(platform)
+        backend = self._create_backend(platform, transport)
         info = ControllerInfo(
             id=cid,
             platform=platform,
+            transport=transport,
             state=ControllerState.CONNECTING,
             created_at=datetime.now(timezone.utc),
         )
