@@ -27,13 +27,18 @@ GamePadServer is a game controller emulation service that runs on a Linux server
 
 ### Installation
 
+The Bluetooth backend talks to BlueZ over D-Bus, which requires the `python3-dbus` C extension. It is not pip-installable — install it via apt and create the venv with `--system-site-packages` so the venv can see it:
+
 ```bash
+sudo apt install python3-dbus python3-gi
 git clone <repo-url> GamePadServer
 cd GamePadServer
-python3 -m venv .venv
+python3 -m venv --system-site-packages .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+If you see `No module named 'dbus'` when creating a controller, the venv was built without `--system-site-packages`. Recreate it with the flag above, or edit `.venv/pyvenv.cfg` and set `include-system-site-packages = true`.
 
 ### Host Setup
 
