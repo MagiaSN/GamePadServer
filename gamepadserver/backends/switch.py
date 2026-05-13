@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import errno as _errno
 import logging
 import subprocess
 import threading
@@ -23,6 +24,29 @@ from gamepadserver.core.backend import GamepadBackend
 from gamepadserver.core.models import ControllerState, InputState
 
 logger = logging.getLogger(__name__)
+
+# How often the keep-alive thread emits a healthy heartbeat log line.
+KEEPALIVE_HEARTBEAT_INTERVAL_SECONDS = 300
+
+
+def _fmt_age(seconds: float) -> str:
+    """Render a duration as e.g. '32s' / '4m17s' / '3h05m'. Diagnostic only."""
+    s = int(seconds)
+    if s < 60:
+        return f"{s}s"
+    m, s = divmod(s, 60)
+    if m < 60:
+        return f"{m}m{s:02d}s"
+    h, m = divmod(m, 60)
+    return f"{h}h{m:02d}m"
+
+
+def _errno_name(e: int | None) -> str:
+    """errno number → symbolic name (e.g. 104 → 'ECONNRESET')."""
+    if e is None:
+        return "?"
+    return _errno.errorcode.get(e, "?")
+
 
 # API button name → ReportBuilder button name (BUTTON_MAP keys in constants.py)
 _BUTTON_MAP: dict[str, str] = {
@@ -61,6 +85,9 @@ class SwitchBackend(GamepadBackend):
         self._send_lock = threading.Lock()
         self._keepalive_stop = threading.Event()
         self._keepalive_thread: threading.Thread | None = None
+        # Wall-clock-ish reference for "how long has this connection lived",
+        # set after the handshake completes.  None ⇒ never connected.
+        self._connected_at: float | None = None
 
     # ------------------------------------------------------------------
     # GamepadBackend interface
@@ -165,6 +192,7 @@ class SwitchBackend(GamepadBackend):
         self._protocol.handshake(timeout=SWITCH_CONNECTION_TIMEOUT_SECONDS)
         # Adopt the protocol's report builder so we keep the timer in sync
         self._report = self._protocol.report
+        self._connected_at = time.monotonic()
 
         # 7. Start keep-alive thread
         self._keepalive_stop.clear()
@@ -234,13 +262,24 @@ class SwitchBackend(GamepadBackend):
             self._agent.unregister()
             self._agent = None
 
-        logger.info("Switch controller disconnected")
+        age_s = (
+            _fmt_age(time.monotonic() - self._connected_at)
+            if self._connected_at is not None else "n/a"
+        )
+        logger.info("Switch controller disconnected (age=%s)", age_s)
+        self._connected_at = None
 
     # ------------------------------------------------------------------
     # Keep-alive loop (background thread)
     # ------------------------------------------------------------------
 
     def _keepalive_loop(self) -> None:
+        started_at = time.monotonic()
+        last_send_ok = started_at
+        last_heartbeat = started_at
+        sends = 0
+        logger.info("keep-alive started")
+
         while not self._keepalive_stop.is_set():
             try:
                 with self._send_lock:
@@ -250,11 +289,49 @@ class SwitchBackend(GamepadBackend):
                     self._protocol.process_incoming()
                     # Send current input state
                     self._conn.send(self._report.standard_report())
-            except OSError:
-                logger.warning("Keep-alive send failed — connection lost")
+                sends += 1
+                last_send_ok = time.monotonic()
+            except OSError as exc:
+                ref = self._connected_at if self._connected_at is not None else started_at
+                age = time.monotonic() - ref
+                since_ok = time.monotonic() - last_send_ok
+                logger.warning(
+                    "keep-alive OSError errno=%s(%s) age=%s sends=%d "
+                    "since_last_ok=%.2fs: %s",
+                    _errno_name(exc.errno), exc.errno, _fmt_age(age),
+                    sends, since_ok, exc,
+                )
                 self._state = ControllerState.ERROR
                 break
+            except Exception:
+                # Catch-all so a non-OSError (parse bug, AttributeError, …)
+                # does not silently kill the daemon thread.
+                ref = self._connected_at if self._connected_at is not None else started_at
+                age = time.monotonic() - ref
+                logger.exception(
+                    "keep-alive crashed (non-OSError) age=%s sends=%d",
+                    _fmt_age(age), sends,
+                )
+                self._state = ControllerState.ERROR
+                break
+
+            now = time.monotonic()
+            if now - last_heartbeat >= KEEPALIVE_HEARTBEAT_INTERVAL_SECONDS:
+                ref = self._connected_at if self._connected_at is not None else started_at
+                logger.info(
+                    "keep-alive healthy age=%s sends=%d",
+                    _fmt_age(now - ref), sends,
+                )
+                last_heartbeat = now
+
             self._keepalive_stop.wait(1 / 15)
+        else:
+            # Loop exited because the stop event was set (clean shutdown).
+            ref = self._connected_at if self._connected_at is not None else started_at
+            logger.info(
+                "keep-alive stopped cleanly age=%s sends=%d",
+                _fmt_age(time.monotonic() - ref), sends,
+            )
 
     # ------------------------------------------------------------------
     # Helpers
@@ -270,9 +347,26 @@ class SwitchBackend(GamepadBackend):
             with self._send_lock:
                 self._conn.send(self._report.standard_report())
         except OSError as exc:
+            age_s = (
+                _fmt_age(time.monotonic() - self._connected_at)
+                if self._connected_at is not None else "n/a"
+            )
+            logger.warning(
+                "_press_sync OSError errno=%s(%s) age=%s: %s",
+                _errno_name(exc.errno), exc.errno, age_s, exc,
+            )
             self._state = ControllerState.ERROR
             raise RuntimeError(f"Connection lost: {exc}") from exc
 
     def _ensure_connected(self) -> None:
         if self._conn is None or self._state != ControllerState.CONNECTED:
-            raise RuntimeError("Switch controller is not connected.")
+            state_name = self._state.name
+            if self._connected_at is None:
+                ctx = "never_connected"
+            else:
+                age = time.monotonic() - self._connected_at
+                ctx = f"was_connected_for={_fmt_age(age)}"
+            raise RuntimeError(
+                f"Switch controller is not connected "
+                f"(state={state_name}, {ctx})."
+            )

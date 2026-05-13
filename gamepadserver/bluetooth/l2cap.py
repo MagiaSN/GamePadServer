@@ -10,6 +10,7 @@ The sockets are obtained either from:
 
 from __future__ import annotations
 
+import errno as _errno
 import fcntl
 import logging
 import os
@@ -43,6 +44,8 @@ class L2CAPConnection:
         self.client_address = client_address
         # Set interrupt socket to non-blocking for recv during protocol loop
         fcntl.fcntl(self.itr.fileno(), fcntl.F_SETFL, os.O_NONBLOCK)
+        # Diagnostic: log peer-FIN / recv OSError once, not on every poll.
+        self._peer_closed_logged = False
 
     # ------------------------------------------------------------------
     # Data transfer (interrupt channel)
@@ -55,12 +58,29 @@ class L2CAPConnection:
     def recv(self, bufsize: int = 128) -> bytes | None:
         """Non-blocking receive from the interrupt channel.
 
-        Returns None if no data is available.
+        Returns None if no data is available, the peer has closed, or the
+        socket raised an OSError.  The first peer-close / OSError event is
+        logged exactly once so we can later correlate with the keep-alive
+        send that fails next.
         """
         try:
             data = self.itr.recv(bufsize)
-            return data if data else None
-        except (BlockingIOError, OSError):
+            if data:
+                return data
+            # recv returned b"" → peer sent FIN on the interrupt channel.
+            if not self._peer_closed_logged:
+                log.warning("peer closed itr channel (recv returned EOF)")
+                self._peer_closed_logged = True
+            return None
+        except BlockingIOError:
+            return None
+        except OSError as exc:
+            if not self._peer_closed_logged:
+                name = _errno.errorcode.get(exc.errno, "?") if exc.errno else "?"
+                log.warning(
+                    "itr recv OSError errno=%s(%s): %s", name, exc.errno, exc,
+                )
+                self._peer_closed_logged = True
             return None
 
     # ------------------------------------------------------------------
