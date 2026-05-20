@@ -5,8 +5,19 @@ Pro Controller.  BlueZ requires a registered Agent1 on the D-Bus to
 handle the pairing confirmation — without one, authentication always
 fails with status 0x05.
 
-This module registers a NoInputNoOutput agent that auto-accepts all
-pairing and service-authorization requests.
+The Agent1 D-Bus object, the BlueZ-side registration, and the GLib
+MainLoop are all **process-wide singletons** — there is only one
+Bluetooth adapter, only one default Agent at a time, and only one
+mainloop per process.  The ``BlueZAgent`` instance method ``register``
+is therefore idempotent: the first caller in the process actually
+sets things up, subsequent callers just see them already in place.
+``unregister`` is similarly a no-op for the singletons — they live
+until the process exits — and only clears per-instance flags.
+
+This matters because each ``SwitchBackend.connect()`` creates a new
+``BlueZAgent`` instance.  If each instance tried to recreate the D-Bus
+object at ``/gamepadserver/agent``, the second call would fail with
+"there is already a handler" from libdbus.
 """
 
 from __future__ import annotations
@@ -20,96 +31,89 @@ log = logging.getLogger(__name__)
 _AGENT_PATH = "/gamepadserver/agent"
 _CAPABILITY = "NoInputNoOutput"
 
+# Process-wide singletons.  Guarded by _module_lock — ``register`` may
+# be called concurrently from different ``SwitchBackend`` instances in
+# different threads (in practice we serialise, but cheap to be safe).
+_module_lock = threading.Lock()
+_agent_obj: Any = None
+_mainloop: Any = None
+_mainloop_thread: threading.Thread | None = None
+_bluez_registered = False
+
 
 class BlueZAgent:
-    """Register a D-Bus Agent1 that auto-accepts pairing."""
+    """Idempotent registration façade for the process-wide Agent1.
+
+    Per-instance state only tracks whether *this* instance considers
+    itself registered; the underlying D-Bus object / mainloop / BlueZ
+    registration are shared across all instances for the lifetime of
+    the process.
+    """
 
     def __init__(self) -> None:
         self._registered = False
-        self._mainloop: Any = None
-        self._loop_thread: threading.Thread | None = None
-        self._agent_obj: Any = None
 
     def register(self) -> None:
-        """Register the agent with BlueZ and start the D-Bus listener."""
+        """Ensure the singleton agent is registered with BlueZ."""
+        global _agent_obj, _mainloop, _mainloop_thread, _bluez_registered
+
         import dbus  # type: ignore[import-untyped]
         import dbus.mainloop.glib  # type: ignore[import-untyped]
         import dbus.service  # type: ignore[import-untyped]
 
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        bus = dbus.SystemBus()
-
-        # Create the Agent1 D-Bus object (keep a reference so we can
-        # remove it from the bus cleanly on unregister).
-        self._agent_obj = _AutoAcceptAgent(bus, _AGENT_PATH)
-
-        mgr = dbus.Interface(
-            bus.get_object("org.bluez", "/org/bluez"),
-            "org.bluez.AgentManager1",
-        )
-
-        try:
-            mgr.RegisterAgent(_AGENT_PATH, _CAPABILITY)
-        except Exception as exc:
-            if "Already Exists" in str(exc):
-                log.info("Agent already registered, re-using")
-            else:
-                raise RuntimeError(f"RegisterAgent failed: {exc}")
-
-        try:
-            mgr.RequestDefaultAgent(_AGENT_PATH)
-        except Exception as exc:
-            log.warning("RequestDefaultAgent failed: %s (continuing)", exc)
-
-        self._registered = True
-        log.info("BlueZ Agent registered (capability=%s)", _CAPABILITY)
-
-        # Run the GLib main loop so D-Bus callbacks fire
-        self._start_mainloop()
-
-    def unregister(self) -> None:
-        """Unregister the agent and stop the main loop."""
-        self._stop_mainloop()
-        if not self._registered:
-            return
-        try:
-            import dbus
+        with _module_lock:
+            dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
             bus = dbus.SystemBus()
+
+            # 1. D-Bus object: create exactly once per process.
+            if _agent_obj is None:
+                _agent_obj = _AutoAcceptAgent(bus, _AGENT_PATH)
+
+            # 2. GLib MainLoop: start exactly once per process so D-Bus
+            #    callbacks for User Confirmation actually fire.
+            if _mainloop is None:
+                from gi.repository import GLib  # type: ignore[import-untyped]
+                _mainloop = GLib.MainLoop()
+                _mainloop_thread = threading.Thread(
+                    target=_mainloop.run, daemon=True,
+                    name="BlueZAgentMainLoop",
+                )
+                _mainloop_thread.start()
+
+            # 3. BlueZ registration: idempotent.  We re-call every
+            #    instance so a previous ``unregister`` (or BlueZ
+            #    restart) is recovered from automatically.
             mgr = dbus.Interface(
                 bus.get_object("org.bluez", "/org/bluez"),
                 "org.bluez.AgentManager1",
             )
-            mgr.UnregisterAgent(_AGENT_PATH)
-            log.info("Agent unregistered")
-        except Exception:
-            log.debug("UnregisterAgent failed (may already be gone)")
-
-        # Remove the dbus service object from the bus so we can
-        # re-register cleanly on the next connection.
-        if self._agent_obj is not None:
             try:
-                self._agent_obj.remove_from_bus()
+                mgr.RegisterAgent(_AGENT_PATH, _CAPABILITY)
+            except dbus.exceptions.DBusException as exc:
+                if "Already Exists" in str(exc):
+                    log.debug("Agent already registered with BlueZ")
+                else:
+                    raise RuntimeError(f"RegisterAgent failed: {exc}")
+            try:
+                mgr.RequestDefaultAgent(_AGENT_PATH)
             except Exception as exc:
-                log.debug("Failed to remove agent from bus: %s", exc)
-            self._agent_obj = None
+                log.warning("RequestDefaultAgent failed: %s (continuing)",
+                            exc)
+            _bluez_registered = True
 
+        self._registered = True
+        log.info("BlueZ Agent registered (capability=%s)", _CAPABILITY)
+
+    def unregister(self) -> None:
+        """No-op for the singletons.
+
+        We intentionally keep the D-Bus object, the GLib mainloop, and
+        the BlueZ-side agent registration alive across SwitchBackend
+        lifetimes — there is no harm in leaving them in place, and
+        tearing them down would just create a window during which an
+        incoming SSP could land before the next ``register`` runs.
+        """
         self._registered = False
-
-    def _start_mainloop(self) -> None:
-        from gi.repository import GLib  # type: ignore[import-untyped]
-        self._mainloop = GLib.MainLoop()
-        self._loop_thread = threading.Thread(
-            target=self._mainloop.run, daemon=True
-        )
-        self._loop_thread.start()
-
-    def _stop_mainloop(self) -> None:
-        if self._mainloop is not None:
-            self._mainloop.quit()
-            self._mainloop = None
-        if self._loop_thread is not None:
-            self._loop_thread.join(timeout=2)
-            self._loop_thread = None
 
 
 # ---------------------------------------------------------------------------
@@ -117,7 +121,10 @@ class BlueZAgent:
 # ---------------------------------------------------------------------------
 
 class _AutoAcceptAgent:
-    """Minimal org.bluez.Agent1 — accepts everything."""
+    """Minimal org.bluez.Agent1 — accepts everything.
+
+    Instantiated exactly once per process by ``BlueZAgent.register``.
+    """
 
     INTERFACE = "org.bluez.Agent1"
 
@@ -190,7 +197,3 @@ class _AutoAcceptAgent:
                 log.info("Agent1.Cancel")
 
         self._impl = Impl()
-
-    def remove_from_bus(self) -> None:
-        """Remove the dbus service object from the bus."""
-        self._impl.remove_from_connection()

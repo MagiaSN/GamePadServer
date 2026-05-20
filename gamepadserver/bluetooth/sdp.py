@@ -91,6 +91,14 @@ SDP_RECORD_XML = """\
 _PROFILE_PATH = "/gamepadserver/hid"
 _HID_UUID = "00001124-0000-1000-8000-00805f9b34fb"
 
+# Process-wide singleton for the Profile1 D-Bus object.  Like the
+# BlueZ Agent (see agent.py), this object can only be registered once
+# per process at a given path — successive SwitchBackend instances
+# must reuse it.
+import threading as _threading  # noqa: E402
+_profile_lock = _threading.Lock()
+_profile_obj: Any = None
+
 
 class SDPService:
     """Register an HID SDP record and accept connections via raw L2CAP."""
@@ -100,43 +108,50 @@ class SDPService:
         # Listening sockets (for cleanup)
         self._listen_ctrl: socket.socket | None = None
         self._listen_itr: socket.socket | None = None
-        self._profile_obj: Any = None
 
     def register(self) -> None:
-        """Register the HID profile with BlueZ (for SDP advertisement only)."""
+        """Ensure the singleton HID profile is registered with BlueZ.
+
+        Idempotent: subsequent calls in the same process are cheap
+        no-ops at the D-Bus-object layer; we still re-call
+        ``RegisterProfile`` in case bluetoothd restarted in between.
+        """
+        global _profile_obj
+
         import dbus  # type: ignore[import-untyped]
         import dbus.mainloop.glib  # type: ignore[import-untyped]
         import dbus.service  # type: ignore[import-untyped]
 
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
         bus = dbus.SystemBus()
 
-        # We still need a Profile1 object on the bus even though we
-        # don't use NewConnection — BlueZ requires one for RegisterProfile.
-        # Keep a reference so we can remove it on unregister.
-        self._profile_obj = _Profile1(bus, _PROFILE_PATH)
+        with _profile_lock:
+            # D-Bus object: create exactly once per process.  Trying to
+            # register the same path twice raises "there is already a
+            # handler" from libdbus.
+            if _profile_obj is None:
+                _profile_obj = _Profile1(bus, _PROFILE_PATH)
 
-        manager = dbus.Interface(
-            bus.get_object("org.bluez", "/org/bluez"),
-            "org.bluez.ProfileManager1",
-        )
+            manager = dbus.Interface(
+                bus.get_object("org.bluez", "/org/bluez"),
+                "org.bluez.ProfileManager1",
+            )
 
-        opts: dict[str, object] = {
-            "ServiceRecord": dbus.String(SDP_RECORD_XML),
-            "Role": dbus.String("server"),
-            "RequireAuthentication": dbus.Boolean(False),
-            "RequireAuthorization": dbus.Boolean(False),
-            "AutoConnect": dbus.Boolean(True),
-        }
+            opts: dict[str, object] = {
+                "ServiceRecord": dbus.String(SDP_RECORD_XML),
+                "Role": dbus.String("server"),
+                "RequireAuthentication": dbus.Boolean(False),
+                "RequireAuthorization": dbus.Boolean(False),
+                "AutoConnect": dbus.Boolean(True),
+            }
 
-        try:
-            manager.RegisterProfile(_PROFILE_PATH, _HID_UUID, opts)
-        except dbus.exceptions.DBusException as exc:
-            if "Already Exists" in str(exc):
-                log.info("HID profile already registered, re-using")
-            else:
-                raise RuntimeError(f"RegisterProfile failed: {exc}")
+            try:
+                manager.RegisterProfile(_PROFILE_PATH, _HID_UUID, opts)
+            except dbus.exceptions.DBusException as exc:
+                if "Already Exists" in str(exc):
+                    log.debug("HID profile already registered with BlueZ")
+                else:
+                    raise RuntimeError(f"RegisterProfile failed: {exc}")
 
         self._registered = True
         log.info("HID profile registered (Role=server, SDP only)")
@@ -204,38 +219,22 @@ class SDPService:
             self._listen_itr = None
 
     def unregister(self) -> None:
-        """Unregister the profile."""
-        # Close any listening sockets
+        """Close any listening sockets; leave the BlueZ profile registered.
+
+        The Profile1 D-Bus object and the BlueZ-side profile registration
+        are intentionally process-wide singletons (see ``register``).
+        Tearing them down would just create a window during which the
+        Switch can't see our HID record — and the SDP profile is cheap
+        to leave in place.
+        """
         for s in (self._listen_ctrl, self._listen_itr):
             if s is not None:
                 try:
                     s.close()
                 except OSError:
                     pass
-
-        if not self._registered:
-            return
-        try:
-            import dbus
-            bus = dbus.SystemBus()
-            manager = dbus.Interface(
-                bus.get_object("org.bluez", "/org/bluez"),
-                "org.bluez.ProfileManager1",
-            )
-            manager.UnregisterProfile(_PROFILE_PATH)
-            log.info("HID profile unregistered")
-        except Exception:
-            log.debug("UnregisterProfile failed (may already be gone)")
-
-        # Remove the dbus service object from the bus so we can re-register
-        # on the next connection attempt.
-        if self._profile_obj is not None:
-            try:
-                self._profile_obj.remove_from_bus()
-            except Exception as exc:
-                log.debug("Failed to remove profile from bus: %s", exc)
-            self._profile_obj = None
-
+        self._listen_ctrl = None
+        self._listen_itr = None
         self._registered = False
 
 
@@ -244,7 +243,10 @@ class SDPService:
 # ---------------------------------------------------------------------------
 
 class _Profile1:
-    """Minimal org.bluez.Profile1 — only exists to satisfy RegisterProfile."""
+    """Minimal org.bluez.Profile1 — only exists to satisfy RegisterProfile.
+
+    Instantiated exactly once per process by ``SDPService.register``.
+    """
 
     INTERFACE = "org.bluez.Profile1"
 
@@ -280,7 +282,3 @@ class _Profile1:
                 log.info("Profile1.Release")
 
         self._impl = Impl()
-
-    def remove_from_bus(self) -> None:
-        """Remove the dbus service object from the bus."""
-        self._impl.remove_from_connection()
