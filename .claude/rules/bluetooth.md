@@ -10,7 +10,10 @@ paths:
 - bluetoothd must run with `--compat --noplugin=input` (not `--noplugin=*`)
 
 ## SSP pairing
-- A D-Bus Agent1 (NoInputNoOutput) must be registered and set as default — `btmgmt io-cap 3` alone is not enough
+- A D-Bus Agent1 (NoInputNoOutput) must be registered and set as default — required for User Confirmation
+- `btmgmt --index <N> io-cap 3` must also be set — on BlueZ 5.82 (Pi 5) the agent capability does NOT propagate to the kernel's inbound IO Capability Reply
+- Both pieces are required; one alone is not enough (agent without io-cap → kernel advertises DisplayYesNo and Switch refuses; io-cap without agent → User Confirmation auto-rejects)
+- If outbound reconnect fails with ECONNREFUSED/ECONNRESET, remove the Pi-side bond (`paired.unpair`) before falling back to listen — a stale half-bond blocks post-SSP encryption on the inbound side
 - Only one GLib MainLoop per process — agent owns it, no other module should start another
 
 ## Protocol timing

@@ -244,6 +244,107 @@ Controller capture.
 
 ---
 
+## Agent capability not propagated into kernel IO Capability Reply (Pi 5 / BlueZ 5.82)
+
+> First observed on Raspberry Pi 5 (BCM2712), BlueZ 5.82, kernel
+> 6.12.75.  Same code worked on Pi 3B with an earlier BlueZ.
+
+**Symptom:** SSP succeeds (Simple Pairing Complete + Link Key
+Notification both fire), but **no `Encryption Change` event ever
+arrives**.  The Switch sits idle for ~3 seconds after pairing, never
+opens PSM 1 (SDP) or PSM 17/19 (HID), then disconnects with
+"Remote User Terminated Connection" (0x13).  The Switch then re-pairs
+in a loop, each attempt generating a fresh link key that is never
+used.
+
+**Investigation:** Diffed the failing btmon trace against
+`captures/switch_connect_success.btsnoop`.  Only difference around
+SSP:
+
+| | Failing (Pi 5) | Success (Pi 3B) |
+|---|---|---|
+| Pi's IO Capability Reply | `DisplayYesNo (0x01)` | `NoInputNoOutput (0x03)` |
+| `Encryption Change` after Link Key | absent | AES-CCM enabled |
+| L2CAP PSM 1 (SDP) open by Switch | never | yes |
+| L2CAP PSM 17/19 (HID) open | never | yes |
+
+Our D-Bus `Agent1` is registered with `NoInputNoOutput` (and is the
+default agent — `RequestDefaultAgent` returns success).  Yet the
+kernel sends `DisplayYesNo` in the HCI IO Capability Reply.  Once both
+sides advertise mismatched io-caps, SSP completes via Numeric
+Comparison (User Confirmation Request fires with a passkey) instead
+of Just Works — the Switch then refuses to continue the Pro Controller
+flow.
+
+**Root cause:** On BlueZ 5.82, the IO Capability value the kernel
+sends back to the controller chip is taken from kernel mgmt state, not
+from the registered `Agent1`.  The Agent1 capability is consulted for
+*outbound* pairings initiated through D-Bus but not for inbound SSP
+that the kernel handles via the mgmt API.  The kernel default is
+`DisplayYesNo`.
+
+The pitfall in [SSP pairing: Agent required](#ssp-pairing-agent-required)
+correctly notes that `btmgmt io-cap` alone is insufficient because the
+agent must accept the User Confirmation.  The mirror failure is also
+true: an agent alone is insufficient on newer BlueZ — `btmgmt io-cap`
+must explicitly set the kernel value.  **Both pieces are required.**
+
+**Fix:** `BluetoothAdapter.setup()` calls
+`btmgmt --index <N> io-cap 3` after `hciconfig piscan`/class setup
+(see `gamepadserver/bluetooth/adapter.py::_btmgmt_io_cap_no_io`).
+Idempotent on Pi 3B (the value matches what the agent was already
+propagating) and corrects the kernel default on Pi 5.
+
+**Lesson:** "Configured via D-Bus" and "what the chip actually
+broadcasts" are two different things on BlueZ.  When SSP parameters
+on the wire disagree with what you registered, write the value
+through `btmgmt` as a belt-and-braces second source.
+
+---
+
+## Stale Pi-side bond blocks inbound SSP encryption
+
+**Symptom:** User chose "Disconnect" in the Switch's Controllers menu
+(clearing the Switch-side bond), but the Pi-side bond record under
+`/var/lib/bluetooth/<adapter>/<switch>/` still exists.  Outbound
+reconnect fails fast with `ECONNREFUSED` (or `ECONNRESET` after L2CAP
+"Connection refused - security block" on PSM 17).  Falling back to
+the listen path, the Switch dials in, SSP completes with a fresh link
+key — but `Encryption Change` never fires, and the link drops 3 s
+later.  Identical symptom to the io-cap pitfall above, but persists
+even after that fix is applied.
+
+**Investigation:** Compared three btmon traces, varying io-cap state
+and bond state independently:
+
+| io-cap | Pi-side bond | Outcome |
+|---|---|---|
+| `DisplayYesNo` (default) | stale (Pi has, Switch doesn't) | SSP ok, no encryption, drop |
+| `NoInputNoOutput` (btmgmt) | stale | SSP ok, no encryption, drop |
+| `NoInputNoOutput` (btmgmt) | cleared | SSP ok, encryption, HID, success |
+
+The bond's presence on the Pi side blocks post-SSP encryption even
+when io-cap is correct.  bluetoothd appears to get confused between
+the stored link key and the newly negotiated one and never issues the
+HCI `Set Connection Encryption`.
+
+**Root cause:** Asymmetric bond state.  bluetoothd's encryption logic
+on the inbound path assumes the stored bond is valid; when the remote
+re-pairs from scratch, the post-SSP encryption step is skipped
+because bluetoothd thinks "we are already bonded, nothing to do."
+
+**Fix:** When outbound reconnect fails with `ECONNREFUSED` /
+`ECONNRESET` (which by definition means the Switch refused us, so
+its bond is gone), `SwitchBackend._open_l2cap` calls
+`paired.unpair(mac)` to remove the Pi-side bond via
+`Adapter1.RemoveDevice` before falling back to the listen path.
+
+**Lesson:** Bond state must be kept symmetric.  If the remote can
+refuse our authenticated reconnect, the local bond record is by
+definition stale — wipe it before re-pairing.
+
+---
+
 ## General principles
 
 1. **bluetoothd is both essential and adversarial.**  It provides

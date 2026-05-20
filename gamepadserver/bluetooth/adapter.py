@@ -11,6 +11,7 @@ import logging
 import subprocess
 
 from .constants import DEVICE_CLASS, DEVICE_NAME
+from . import mgmt
 
 log = logging.getLogger(__name__)
 
@@ -46,6 +47,15 @@ class BluetoothAdapter:
         if current and current != DEVICE_CLASS:
             log.warning("Device class reset to %s, retrying…", current)
             self._hci("class", DEVICE_CLASS)
+
+        # Force the kernel IO Capability to NoInputNoOutput.  The D-Bus
+        # Agent1 declares this too, but on BlueZ 5.82 / Pi 5 that value
+        # is not propagated into the IO Capability Reply for inbound
+        # SSP — bluetoothd sends the kernel default (DisplayYesNo), the
+        # Switch then sees a "wrong" peer, never enables encryption,
+        # and drops the link ~3 s after pairing.  Idempotent on Pi 3B,
+        # required on Pi 5.  See .claude/docs/bluetooth/pitfalls.md.
+        self._set_kernel_io_cap_no_io()
 
         log.info("Adapter %s ready  class=%s  name=%s",
                  self.device, DEVICE_CLASS, DEVICE_NAME)
@@ -102,3 +112,22 @@ class BluetoothAdapter:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=10,
                            check=False)
         return r.stdout
+
+    def _set_kernel_io_cap_no_io(self) -> None:
+        """Set kernel IO Capability to NoInputNoOutput for this adapter.
+
+        Best-effort: warns and continues on any error.  Older BlueZ
+        (e.g. Pi 3B / BlueZ 5.55) may still work via the Agent1
+        capability alone, so a failure here is not fatal.
+        """
+        if self.device.startswith("hci") and self.device[3:].isdigit():
+            index = int(self.device[3:])
+        else:
+            log.warning("Cannot derive adapter index from %r; skipping io-cap",
+                        self.device)
+            return
+        try:
+            mgmt.set_io_capability(index, mgmt.IO_CAP_NO_INPUT_NO_OUTPUT)
+        except (OSError, mgmt.MgmtError) as exc:
+            log.warning("mgmt set io-cap failed: %s — relying on Agent1 only",
+                        exc)

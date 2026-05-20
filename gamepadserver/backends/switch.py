@@ -16,7 +16,7 @@ from gamepadserver.bluetooth.constants import (
     SWITCH_CONNECTION_TIMEOUT_SECONDS,
 )
 from gamepadserver.bluetooth.l2cap import L2CAPConnection, connect_outbound
-from gamepadserver.bluetooth.paired import list_paired_switches
+from gamepadserver.bluetooth.paired import list_paired_switches, unpair
 from gamepadserver.bluetooth.sdp import SDPService
 from gamepadserver.bluetooth.switch_protocol import SwitchProtocol
 from gamepadserver.bluetooth.switch_report import ReportBuilder, stick_from_api
@@ -223,12 +223,26 @@ class SwitchBackend(GamepadBackend):
                 ctrl, itr = connect_outbound(mac)
                 return ctrl, itr, mac
             except (OSError, _socket.timeout) as exc:
-                logger.warning(
-                    "Reconnect to %s failed (%s) — falling back to listen path. "
-                    "This run will be slow; if it still fails, clear the Switch-"
-                    "side bond (Controllers → disconnect) and try again.",
-                    mac, exc,
-                )
+                errno = getattr(exc, "errno", None)
+                # ECONNREFUSED / ECONNRESET ⇒ Switch is reachable but
+                # actively refused us, i.e. its side of the bond is
+                # gone (user picked "Disconnect" on the Switch).  Drop
+                # the Pi-side bond so the inbound SSP that follows
+                # isn't blocked by a half-bond — see paired.unpair().
+                if errno in (_errno.ECONNREFUSED, _errno.ECONNRESET):
+                    logger.warning(
+                        "Reconnect to %s refused (%s) — Switch-side bond is "
+                        "likely gone; removing Pi-side bond and falling back "
+                        "to listen path.", mac, _errno_name(errno),
+                    )
+                    unpair(mac)
+                else:
+                    logger.warning(
+                        "Reconnect to %s failed (%s) — falling back to listen "
+                        "path. This run will be slow; if it still fails, clear "
+                        "the Switch-side bond (Controllers → disconnect) and "
+                        "try again.", mac, exc,
+                    )
 
         logger.info("Listening for Switch on L2CAP PSM 17+19 (first-pair path)")
         ctrl, itr = self._sdp.wait_for_connection(
